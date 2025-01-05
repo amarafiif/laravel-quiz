@@ -16,16 +16,16 @@
                                     <img src="{{ $item->thumbnail }}" class="rounded-lg" alt="thumbnail">
                                 </div>
                                 <div class="w-6/12 content-center">
-                                    <h1 class="text-2xl font-medium text-gray-900">
+                                    <h3 class="text-xl font-medium text-gray-900">
                                         {{ $item->name }}
-                                    </h1>
+                                    </h3>
                                     <p class="mt-5 text-gray-500 leading-relaxed">
                                         {{ $item->description }}
                                     </p>
                                 </div>
                                 <div class="w-3/12 content-center justify-items-center">
-                                    <a href="#"
-                                        class="flex ms-4 px-4 py-2 rounded-md bg-slate-300 text-slate-700 hover:bg-slate-400 hover:text-slate-800 focus:bg-slate-400 focus:text-slate-800 active:bg-slate-400">
+                                    <a href="{{ route('courses.show', $item->id) }}"
+                                        class="flex ms-4 text-sm font-semibold px-4 py-2 rounded-md bg-slate-300 text-slate-700 hover:bg-slate-400 hover:text-slate-800 focus:bg-slate-400 focus:text-slate-800 active:bg-slate-400">
                                         Lanjutkan Kursus
                                     </a>
                                 </div>

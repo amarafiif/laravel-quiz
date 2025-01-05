@@ -19,7 +19,8 @@ class CourseController extends Controller
 
     public function show(string $id)
     {
-        $course = Course::findOrFail($id);
+        $course = Course::with('quizzes')
+            ->findOrFail($id);
 
         return view('courses.show', [
             'course' => new CourseResource($course),

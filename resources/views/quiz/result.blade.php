@@ -69,7 +69,7 @@
                             Coba Lagi
                         </a>
                     @endif
-                    <a href="{{ url()->previous() }}" class="text-gray-600 hover:text-gray-900">
+                    <a href="{{ route('courses.index') }}" class="text-gray-600 hover:text-gray-900">
                         Kembali
                     </a>
                 </div>

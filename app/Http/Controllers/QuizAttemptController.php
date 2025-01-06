@@ -39,14 +39,12 @@ class QuizAttemptController extends Controller
         }
 
         $now = now();
-        // Parse the attempt_time string to get the duration
-        $duration = Carbon::parse($quiz->attempt_time)->diffInSeconds(Carbon::parse('00:00:00'));
-
+        $minutes = (int) Carbon::parse($quiz->attempt_time)->format('i');
         $attempt = QuizAttempt::create([
             'user_id' => Auth::id(),
             'quiz_id' => $quiz->id,
             'started_at' => $now,
-            'ends_at' => $now->copy()->addSeconds($duration),
+            'ends_at' => $now->copy()->addMinutes($minutes),
             'is_completed' => false,
             'submitted_at' => null,
             'score' => null
@@ -73,17 +71,25 @@ class QuizAttemptController extends Controller
         }
 
         $questions = $attempt->quiz->questions()->with('options')->get();
-
+        $remainingTime = max(0, (int) now()->diffInSeconds($attempt->ends_at));
         $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->pluck('selected_option_id', 'question_id')
             ->toArray();
+
 
         return view('quiz.attempt', [
             'attempt' => $attempt,
             'questions' => $questions,
             'userAnswers' => $userAnswers,
-            'remainingTime' => now()->diffInSeconds($attempt->ends_at)
+            'remainingTime' => $remainingTime
         ]);
+    }
+
+    private function submitAutomatically(QuizAttempt $attempt)
+    {
+        if (!$attempt->is_completed) {
+            $this->calculateScore($attempt);
+        }
     }
 
     public function saveAnswer(Request $request, QuizAttempt $attempt)
@@ -132,13 +138,6 @@ class QuizAttemptController extends Controller
 
         return redirect()->route('quiz.result', $attempt->id)
             ->with('success', 'Kuis berhasil diselesaikan!');
-    }
-
-    private function submitAutomatically(QuizAttempt $attempt)
-    {
-        if (!$attempt->is_completed) {
-            $this->calculateScore($attempt);
-        }
     }
 
     public function showResult(QuizAttempt $attempt)

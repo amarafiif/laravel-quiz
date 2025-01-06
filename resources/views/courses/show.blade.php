@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach ($course->quizzes as $item)
-                    <a href="#" class="block">
+                    <a href="{{ route('quiz.start', $item->id) }}" class="block">
                         <div
                             class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-lg transition duration-200 transform hover:-translate-y-1">
                             <div class="p-4 space-y-3">

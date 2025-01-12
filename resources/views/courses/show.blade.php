@@ -7,6 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <x-alert></x-alert>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @foreach ($course->quizzes as $item)
                     <a href="{{ route('quiz.start', $item->id) }}" class="block">

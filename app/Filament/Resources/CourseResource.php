@@ -12,8 +12,10 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -112,7 +114,16 @@ class CourseResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
-                    ->disabled(),
+                    ->before(function (DeleteAction $action) {
+                        Notification::make()
+                            ->danger()
+                            ->title('Akses Ditolak')
+                            ->body('Anda tidak diizinkan untuk menghapus data ini!')
+                            ->duration(5000)
+                            ->send();
+
+                        $action->cancel();
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

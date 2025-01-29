@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CourseResource\Pages;
 use App\Filament\Resources\CourseResource\RelationManagers;
+use App\Filament\Resources\CourseResource\RelationManagers\QuizzesRelationManager;
 use App\Models\Course;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
@@ -136,7 +137,7 @@ class CourseResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            QuizzesRelationManager::class,
         ];
     }
 
@@ -144,6 +145,7 @@ class CourseResource extends Resource
     {
         return [
             'index' => Pages\ListCourses::route('/'),
+            'view' => Pages\ViewCourse::route('/{record}')
         ];
     }
 }

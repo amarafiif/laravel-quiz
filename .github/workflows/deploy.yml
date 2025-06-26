@@ -16,11 +16,15 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          source ~/.nvm/nvm.sh
-          cd /home/quiz.amarafif.xyz/public_html
-          git pull origin main
-          composer install --no-dev --optimize-autoloader
-          php artisan migrate --force
-          php artisan optimize:clear
-          npm install
-          npm run build
+                set -e
+                export NVM_DIR="/root/.nvm"
+                source $NVM_DIR/nvm.sh
+                nvm use --lts
+                cd /home/quiz.amarafif.xyz/public_html
+                git stash || true
+                git pull origin main
+                composer install --no-dev --optimize-autoloader
+                php artisan migrate --force
+                php artisan optimize:clear
+                npm install
+                npm run build

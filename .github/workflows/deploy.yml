@@ -1,4 +1,4 @@
-name: Deploy Laravel to CyberPanel
+name: 📨 Deploy Laravel to CyberPanel
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          sudo su
+          source ~/.nvm/nvm.sh
           cd /home/quiz.amarafif.xyz/public_html
           git pull origin main
           composer install --no-dev --optimize-autoloader

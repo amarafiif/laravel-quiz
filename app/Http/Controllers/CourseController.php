@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\CourseResource;
 use App\Models\Course;
-use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::where('is_active', true)
+            ->where('is_publish', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('courses.index', [
-            'courses' => CourseResource::collection($courses)
+            'courses' => CourseResource::collection($courses),
         ]);
     }
 

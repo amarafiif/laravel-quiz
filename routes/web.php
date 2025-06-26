@@ -1,17 +1,26 @@
 <?php
 
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\QuizAttemptController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.member', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::prefix('courses')->group(function () {
+        Route::get('/', [CourseController::class, 'index'])->name('courses.index');
+        Route::get('/{id}', [CourseController::class, 'show'])->name('courses.show');
+    });
+
+    Route::get('/quiz/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
+    Route::get('/quiz/attempt/{attempt}', [QuizAttemptController::class, 'showAttempt'])->name('quiz.attempt');
+    Route::post('/quiz/attempt/{attempt}/answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.answer');
+    Route::post('/quiz/attempt/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
+    Route::get('/quiz/result/{attempt}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');
 });

@@ -43,12 +43,17 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+            <div class="bg-white shadow-xl sm:rounded-lg p-6 min-h-screen">
                 <form id="quizForm" action="{{ route('quiz.submit', $attempt->id) }}" method="POST">
-                    @csrf
+                    @csrf                    
                     <div class="space-y-6">
                         @foreach ($questions as $question)
-                            <div class="border rounded-lg p-4" id="question-container-{{ $question->id }}">
+                            <div class="border rounded-lg p-4 mb-4 bg-white" id="question-container-{{ $question->id }}" style="min-height: 100px; visibility: visible !important; display: block !important;">
+                                <!-- Debug untuk setiap question -->
+                                <div class="text-xs text-gray-500 mb-2">
+                                    Debug: Question ID {{ $question->id }} - Options: {{ $question->options->count() }}
+                                </div>
+                                
                                 <div class="mb-3">
                                     <h4 class="font-semibold text-md">
                                         {{ $loop->iteration }}. {{ $question->question_text }}

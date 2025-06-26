@@ -16,6 +16,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
+          sudo su
           cd /home/quiz.amarafif.xyz/public_html
           git pull origin main
           composer install --no-dev --optimize-autoloader

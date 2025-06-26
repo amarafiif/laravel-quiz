@@ -16,7 +16,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          cd /home/app.amarafif.xyz/public_html
+          cd /home/quiz.amarafif.xyz/public_html
           git pull origin main
           composer install --no-dev --optimize-autoloader
           php artisan migrate --force

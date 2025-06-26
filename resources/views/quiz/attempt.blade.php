@@ -48,12 +48,7 @@
                     @csrf                    
                     <div class="space-y-6">
                         @foreach ($questions as $question)
-                            <div class="border rounded-lg p-4 mb-4 bg-white" id="question-container-{{ $question->id }}" style="min-height: 100px; visibility: visible !important; display: block !important;">
-                                <!-- Debug untuk setiap question -->
-                                <div class="text-xs text-gray-500 mb-2">
-                                    Debug: Question ID {{ $question->id }} - Options: {{ $question->options->count() }}
-                                </div>
-                                
+                            <div class="border rounded-lg p-4" id="question-container-{{ $question->id }}">
                                 <div class="mb-3">
                                     <h4 class="font-semibold text-md">
                                         {{ $loop->iteration }}. {{ $question->question_text }}

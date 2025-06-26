@@ -71,13 +71,7 @@ class QuizAttemptController extends Controller
 
             return redirect()->route('quiz.result', $attempt->id)
                 ->with('warning', 'Waktu pengerjaan telah habis.');
-        }
-
-        $questions = $attempt->quiz->questions()->with('options')->orderBy('id')->get();
-
-        // Debug: Log jumlah questions
-        Log::info('Quiz ID: '.$attempt->quiz->id.' - Questions count: '.$questions->count());
-        Log::info('Questions IDs: '.$questions->pluck('id')->implode(', '));
+        }        $questions = $attempt->quiz->questions()->with('options')->orderBy('id')->get();
 
         $remainingTime = max(0, (int) now()->diffInSeconds($attempt->ends_at));
         $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)

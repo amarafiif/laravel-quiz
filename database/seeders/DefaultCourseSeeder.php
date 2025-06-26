@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Course;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DefaultCourseSeeder extends Seeder
 {
@@ -18,8 +17,6 @@ class DefaultCourseSeeder extends Seeder
                 'description' => 'Belajar dasar-dasar pemrograman dengan menggunakan bahasa pemrograman populer.',
                 'is_active' => 1,
                 'is_publish' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'code' => 'CS102',
@@ -28,8 +25,6 @@ class DefaultCourseSeeder extends Seeder
                 'description' => 'Mempelajari cara membangun aplikasi web menggunakan HTML, CSS, dan JavaScript.',
                 'is_active' => 1,
                 'is_publish' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'code' => 'CS103',
@@ -38,8 +33,6 @@ class DefaultCourseSeeder extends Seeder
                 'description' => 'Memahami konsep dasar data science dan analisis data menggunakan Python.',
                 'is_active' => 1,
                 'is_publish' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'code' => 'CS104',
@@ -48,12 +41,20 @@ class DefaultCourseSeeder extends Seeder
                 'description' => 'Belajar tentang algoritma machine learning dan penerapannya.',
                 'is_active' => 1,
                 'is_publish' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
         ];
 
-        // Insert data ke dalam tabel courses
-        DB::table('courses')->insert($courses);
+        foreach ($courses as $courseData) {
+            $course = Course::updateOrCreate(
+                ['code' => $courseData['code']],
+                $courseData
+            );
+
+            if ($course->wasRecentlyCreated) {
+                $this->command->info("Course CREATED: {$course->name} (Code: {$course->code})");
+            } else {
+                $this->command->info("Course UPDATED: {$course->name} (Code: {$course->code})");
+            }
+        }
     }
 }

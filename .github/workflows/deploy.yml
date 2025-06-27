@@ -28,4 +28,5 @@ jobs:
               php artisan optimize:clear
               npm install
               chmod +x node_modules/.bin/vite
+              chmod +x node_modules/@esbuild/linux-arm64/bin/esbuild
               npm run build

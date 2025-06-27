@@ -27,4 +27,5 @@ jobs:
               php artisan migrate --force
               php artisan optimize:clear
               npm install
+              chmod +x node_modules/.bin/vite
               npm run build

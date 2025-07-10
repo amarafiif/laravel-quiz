@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 
 Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.member', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
+    Route::get('/dashboard', [QuizAttemptController::class, 'history'])->name('dashboard');
     Route::prefix('courses')->group(function () {
         Route::get('/', [CourseController::class, 'index'])->name('courses.index');
         Route::get('/{id}', [CourseController::class, 'show'])->name('courses.show');

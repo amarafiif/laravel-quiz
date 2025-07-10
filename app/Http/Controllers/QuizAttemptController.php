@@ -13,6 +13,16 @@ use Illuminate\Support\Facades\Log;
 
 class QuizAttemptController extends Controller
 {
+    public function history()
+    {
+        $attempts = QuizAttempt::where('user_id', Auth::id())
+            ->with('quiz')
+            ->orderBy('started_at', 'desc')
+            ->get();
+
+        return view('dashboard', compact('attempts'));
+    }
+
     public function start(Quiz $quiz)
     {
         if ($quiz->deadline && Carbon::parse($quiz->deadline) < now()) {

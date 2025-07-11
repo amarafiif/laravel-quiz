@@ -24,6 +24,8 @@ class MemberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
+    protected static ?string $navigationGroup = 'Users';
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('role', 'member');
@@ -48,7 +50,7 @@ class MemberResource extends Resource
                             ->default('member')
                             ->required(),
                         DateTimePicker::make('email_verified_at')
-                            ->label('Verifikasi Email')
+                            ->label('Verifikasi Email'),
                     ]),
 
                 Fieldset::make('Kredensial')
@@ -56,19 +58,19 @@ class MemberResource extends Resource
                         TextInput::make('password')
                             ->label('Password')
                             ->password()
-                            ->required(fn(string $context): bool => $context === 'create')
+                            ->required(fn (string $context): bool => $context === 'create')
                             ->minLength(8)
-                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
                             ->visibleOn('create'),
                         TextInput::make('password_confirmation')
                             ->label('Konfirmasi Password')
                             ->password()
-                            ->required(fn(string $context): bool => $context === 'create')
+                            ->required(fn (string $context): bool => $context === 'create')
                             ->minLength(8)
                             ->same('password')
                             ->dehydrated(false)
                             ->visibleOn('create'),
-                    ])
+                    ]),
             ]);
     }
 

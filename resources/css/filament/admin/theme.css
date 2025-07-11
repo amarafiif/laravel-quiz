@@ -21,7 +21,7 @@
 
 /* Sidebar Items */
 .fi-sidebar-item {
-    @apply text-blue-100 rounded-lg transition-all duration-150 !important;
+    @apply text-blue-50 rounded-lg transition-all duration-150 !important;
 }
 
 .fi-sidebar-item-button {
@@ -33,6 +33,7 @@
            active:text-white
            transition-all
            duration-150
+           p-3
            rounded-lg
            !important;
 }
@@ -47,7 +48,7 @@
 
 /* Sidebar Item Icons */
 .fi-sidebar-item-icon {
-    @apply text-slate-300 
+    @apply text-slate-200 
            transition-colors 
            duration-150 
            w-5 
@@ -74,12 +75,21 @@
     @apply text-white font-semibold !important;
 }
 
+/* Icon Buttons */
+.fi-icon-btn {
+    @apply text-slate-400 
+           hover:text-white 
+           focus:text-white 
+           active:text-white 
+           !important;
+}
+
 /* Group Labels */
 .fi-sidebar-group-label {
-    @apply text-blue-300 
-           font-medium 
-           uppercase 
-           text-xs 
+    @apply text-slate-100 
+           font-semibold 
+           text-xs
+           uppercase
            tracking-wider 
            !important;
 }

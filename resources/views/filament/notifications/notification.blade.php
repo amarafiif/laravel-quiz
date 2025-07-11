@@ -63,9 +63,9 @@
             </div>
         @endif
 
-        <div class="mt-0.5 grid flex-1">
+        <div class="mt-0.5 grid flex-1 space-y-2">
             @if ($hasTitle)
-                <x-filament-notifications::title class="tracking-tight font-semibold text-white">
+                <x-filament-notifications::title class="font-semibold tracking-tight text-white">
                     {{ str($title)->sanitizeHtml()->toHtmlString() }}
                 </x-filament-notifications::title>
             @endif
@@ -77,7 +77,7 @@
             @endif
 
             @if ($hasBody)
-                <x-filament-notifications::body>
+                <x-filament-notifications::body class="font-medium tracking-tight text-white">
                     {{ str($body)->sanitizeHtml()->toHtmlString() }}
                 </x-filament-notifications::body>
             @endif
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Modified close button to be white -->
-        <button type="button" class="text-white opacity-70 hover:opacity-100 transition duration-75" x-on:click="close">
+        <button type="button" class="text-white opacity-70 transition duration-75 hover:opacity-100" x-on:click="close">
             <x-filament::icon alias="notifications::notification.close-button" icon="heroicon-m-x-mark" class="h-4 w-4" />
         </button>
     </div>

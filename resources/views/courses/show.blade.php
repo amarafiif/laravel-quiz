@@ -14,7 +14,7 @@
                         <div class="transform overflow-hidden bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg sm:rounded-lg">
                             <div class="space-y-3 p-4">
                                 <div class="aspect-video overflow-hidden rounded-lg">
-                                    <img src="{{ $item->thumbnail }}" class="h-full w-full object-cover" alt="{{ $item->name }} thumbnail">
+                                    <img src="{{ Storage::url($item->thumbnail) }}" class="h-full w-full object-cover" alt="{{ $item->name }} thumbnail">
                                 </div>
                                 <div class="space-y-3">
                                     <h3 class="line-clamp-2 text-lg font-medium text-gray-900">

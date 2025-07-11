@@ -27,8 +27,6 @@ class CourseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
-    protected static ?string $navigationGroup = 'Data Master';
-
     public static function form(Form $form): Form
     {
         return $form

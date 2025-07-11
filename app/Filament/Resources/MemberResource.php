@@ -24,8 +24,6 @@ class MemberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
-    protected static ?string $navigationGroup = 'Users';
-
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('role', 'member');

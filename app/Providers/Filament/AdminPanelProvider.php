@@ -2,10 +2,14 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\CourseResource;
+use App\Filament\Resources\QuizResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
 use Filament\Notifications\Livewire\Notifications;
 use Filament\Notifications\Notification;
 use Filament\Pages;
@@ -45,6 +49,23 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+                return $builder->groups([
+                    NavigationGroup::make()
+                        ->items([
+                            ...Pages\Dashboard::getNavigationItems(),
+                        ]),
+                    NavigationGroup::make('Data Master')
+                        ->items([
+                            ...CourseResource::getNavigationItems(),
+                            ...QuizResource::getNavigationItems(),
+                        ]),
+                    NavigationGroup::make('User Management')
+                        ->items([
+                            ...\App\Filament\Resources\MemberResource::getNavigationItems(),
+                        ]),
+                ]);
+            })
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
@@ -63,7 +84,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                'auth.admin'
+                'auth.admin',
             ])
             ->authGuard('admin');
     }

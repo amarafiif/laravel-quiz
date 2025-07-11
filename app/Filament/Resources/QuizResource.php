@@ -171,7 +171,7 @@ class QuizResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            QuizResource\RelationManagers\QuestionsRelationManager::class,
         ];
     }
 

@@ -4,6 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\QuizResource\Pages;
 use App\Models\Quiz;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -20,7 +28,80 @@ class QuizResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make('Quiz Information')
+                    ->columns(1)
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Quiz Name')
+                            ->required(),
+                        MarkdownEditor::make('description')
+                            ->label('Description')
+                            ->maxLength(500)
+                            ->required()
+                            ->toolbarButtons([
+                                // 'attachFiles',
+                                'blockquote',
+                                'bold',
+                                'bulletList',
+                                'codeBlock',
+                                'heading',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'strike',
+                                'table',
+                                'undo',
+                            ]),
+                        FileUpload::make('thumbnail')
+                            ->label('Thumbnail Quiz')
+                            ->image()
+                            ->directory('thumbnail/quiz')
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeTargetWidth('1920')
+                            ->imageResizeTargetHeight('1080')
+                            ->required(),
+                    ]),
+
+                Section::make('Quiz Settings')
+                    ->collapsible()
+                    ->schema([
+                        Grid::make(2)
+                            ->schema([
+                                TimePicker::make('attempt_time')
+                                    ->label('Attempt Time')
+                                    ->required()
+                                    ->hint('The time allowed for each quiz attempt.')
+                                    ->hintColor('warning')
+                                    ->default(now()->addMinutes(30)),
+                                DateTimePicker::make('deadline')
+                                    ->label('Deadline')
+                                    ->required()
+                                    ->native(false)
+                                    ->seconds(false)
+                                    ->hint('The deadline for quiz submission.')
+                                    ->hintColor('warning')
+                                    ->default(now()->addDays(7)),
+                            ]),
+                        Grid::make(2)
+                            ->schema([
+                                Toggle::make('is_allowed_repeat')
+                                    ->label('Allow Many Attempts')
+                                    ->inline(false)
+                                    ->helperText('If enabled, users can attempt the quiz multiple times.')
+                                    ->default(false)
+                                    ->live(),
+                                TextInput::make('many_attempt')
+                                    ->label('Attempt Limit')
+                                    ->numeric()
+                                    ->default(1)
+                                    ->required(fn ($get) => $get('is_allowed_repeat') === true)
+                                    ->helperText('Set the maximum number of attempts allowed if "Allow Many Attempts" is enabled.')
+                                    ->visible(fn ($get) => $get('is_allowed_repeat') === true),
+                            ]),
+                    ]),
             ]);
     }
 

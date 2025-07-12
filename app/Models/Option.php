@@ -11,11 +11,12 @@ class Option extends Model
         'question_id',
         'option_text',
         'image',
-        'is_correct'
+        'is_correct',
+        'explanation',
     ];
 
     protected $casts = [
-        'is_correct' => 'boolean'
+        'is_correct' => 'boolean',
     ];
 
     public function question(): BelongsTo

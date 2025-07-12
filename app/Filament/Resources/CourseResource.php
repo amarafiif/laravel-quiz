@@ -27,6 +27,11 @@ class CourseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -93,7 +98,7 @@ class CourseResource extends Resource
                 ImageColumn::make('thumbnail')
                     ->label('Thumbnail'),
                 TextColumn::make('name')
-                    ->label('Nama Course')
+                    ->label('Nama Kursus')
                     ->searchable()
                     ->sortable(),
                 ToggleColumn::make('is_active')

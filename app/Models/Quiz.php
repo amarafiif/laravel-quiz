@@ -24,4 +24,9 @@ class Quiz extends Model
     {
         return $this->hasMany(QuizAttempt::class);
     }
+
+    public function getTotalQuestionsAttribute(): int
+    {
+        return $this->questions()->count();
+    }
 }

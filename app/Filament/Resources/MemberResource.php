@@ -24,6 +24,11 @@ class MemberResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return parent::getEloquentQuery()->where('role', 'member')->count();
+    }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->where('role', 'member');

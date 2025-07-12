@@ -17,12 +17,18 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
 
 class QuizResource extends Resource
 {
     protected static ?string $model = Quiz::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -33,14 +39,13 @@ class QuizResource extends Resource
                     ->collapsible()
                     ->schema([
                         TextInput::make('name')
-                            ->label('Quiz Name')
+                            ->label('Nama Kuis')
                             ->required(),
                         MarkdownEditor::make('description')
-                            ->label('Description')
+                            ->label('Deskripsi')
                             ->maxLength(500)
                             ->required()
                             ->toolbarButtons([
-                                // 'attachFiles',
                                 'blockquote',
                                 'bold',
                                 'bulletList',
@@ -55,13 +60,17 @@ class QuizResource extends Resource
                                 'undo',
                             ]),
                         FileUpload::make('thumbnail')
-                            ->label('Thumbnail Quiz')
+                            ->label('Thumbnail Kuis')
                             ->image()
                             ->directory('thumbnail/quiz')
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('16:9')
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
+                            ->hint(new HtmlString(
+                                '1920x1080 piksel. Ukuran file maksimal 2MB.'
+                            ))
+                            ->hintColor('warning')
                             ->required(),
                     ]),
 
@@ -71,34 +80,32 @@ class QuizResource extends Resource
                         Grid::make(2)
                             ->schema([
                                 TimePicker::make('attempt_time')
-                                    ->label('Attempt Time')
+                                    ->label('Batas Waktu')
                                     ->required()
-                                    ->hint('The time allowed for each quiz attempt.')
-                                    ->hintColor('warning')
+                                    ->helperText('Lama waktu pengerjaan untuk setiap percobaan kuis.')
                                     ->default(now()->addMinutes(30)),
                                 DateTimePicker::make('deadline')
-                                    ->label('Deadline')
+                                    ->label('Batas Akhir')
                                     ->required()
                                     ->native(false)
                                     ->seconds(false)
-                                    ->hint('The deadline for quiz submission.')
-                                    ->hintColor('warning')
+                                    ->helperText('Batas waktu terakhir untuk mengerjakan kuis.')
                                     ->default(now()->addDays(7)),
                             ]),
                         Grid::make(2)
                             ->schema([
                                 Toggle::make('is_allowed_repeat')
-                                    ->label('Allow Many Attempts')
+                                    ->label('Izinkan Pengulangan')
                                     ->inline(false)
-                                    ->helperText('If enabled, users can attempt the quiz multiple times.')
+                                    ->helperText('Jika diaktifkan, pengguna dapat mengulangi kuis beberapa kali.')
                                     ->default(false)
                                     ->live(),
                                 TextInput::make('many_attempt')
-                                    ->label('Attempt Limit')
+                                    ->label('Batas Pengulangan')
                                     ->numeric()
                                     ->default(1)
                                     ->required(fn ($get) => $get('is_allowed_repeat') === true)
-                                    ->helperText('Set the maximum number of attempts allowed if "Allow Many Attempts" is enabled.')
+                                    ->helperText('Atur jumlah pengulangan yang diizinkan. Kosongkan untuk tidak ada batasan.')
                                     ->visible(fn ($get) => $get('is_allowed_repeat') === true),
                             ]),
                     ]),
@@ -111,45 +118,51 @@ class QuizResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('course.name')
-                    ->label('Course')
+                    ->label('Nama Kursus')
                     ->limit(20)
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('name')
-                    ->label('Quiz Name')
+                    ->label('Nama Kuis')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('description')
-                    ->label('Description')
+                    ->label('Deskripsi')
                     ->searchable()
                     ->limit(20)
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('total_questions')
+                    ->label('Soal')
+                    ->alignCenter()
+                    ->badge()
+                    ->sortable()
                     ->toggleable(),
                 TextColumn::make('attempt_time')
-                    ->label('Attempt Time')
+                    ->label('Batas Waktu')
                     ->time()
                     ->badge()
                     ->alignCenter()
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('deadline')
-                    ->label('Deadline')
+                    ->label('Batas Akhir')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('many_attempt')
-                    ->label('Many Attempts')
+                    ->label('Pengulangan')
                     ->badge()
                     ->alignCenter()
                     ->sortable()
                     ->toggleable(),
                 TextColumn::make('created_at')
-                    ->label('Created At')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label('Updated At')
+                    ->label('Terakhir Diperbarui')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

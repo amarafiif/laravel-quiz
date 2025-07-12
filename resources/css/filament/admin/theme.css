@@ -37,6 +37,10 @@
            rounded-lg
            !important;
 }
+.fi-sidebar-item-button .fi-badge {
+    @apply bg-blue-700 text-white rounded-md px-2 py-1 text-xs border border-blue-600
+           font-semibold !important;
+}
 
 .fi-sidebar-item-button,
 .fi-sidebar-item-button:hover,

@@ -33,31 +33,37 @@ class QuestionsRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Section::make('Question Details')
+                Section::make('Detail Soal')
                     ->columns(1)
                     ->collapsible()
                     ->schema([
                         TextInput::make('question_text')
-                            ->label('Question Text')
+                            ->label('Teks Soal')
                             ->required()
                             ->maxLength(255),
 
                         Repeater::make('options')
-                            ->label('Options')
+                            ->label('Pilihan Jawaban')
                             ->relationship('options')
                             ->schema([
                                 TextInput::make('option_text')
                                     ->required()
                                     ->maxLength(255),
                                 Toggle::make('is_correct')
-                                    ->label('Is Correct?')
-                                    ->default(false),
+                                    ->label('Benar?')
+                                    ->default(false)
+                                    ->reactive(),
+                                Textarea::make('explanation')
+                                    ->label('Penjelasan')
+                                    ->visible(fn (callable $get) => $get('is_correct'))
+                                    ->placeholder('Berikan penjelasan untuk jawaban yang benar')
+                                    ->maxLength(500),
                             ])
                             ->columns(1)
                             ->required()
                             ->minItems(3)
                             ->maxItems(4)
-                            ->createItemButtonLabel('Add Option'),
+                            ->createItemButtonLabel('Tambah Pilihan'),
                     ]),
             ]);
     }
@@ -68,16 +74,17 @@ class QuestionsRelationManager extends RelationManager
             ->recordTitleAttribute('question_text')
             ->columns([
                 TextColumn::make('question_text')
-                    ->label('Question')
+                    ->label('Soal')
+                    ->limit(50)
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label('Created At')
+                    ->label('Dibuat Pada')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label('Updated At')
+                    ->label('Terakhir Diubah')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -93,44 +100,58 @@ class QuestionsRelationManager extends RelationManager
                     ->color('primary')
                     ->form([
                         TextInput::make('quantity_questions')
-                            ->label('Number of Questions')
+                            ->label('Jumlah Soal')
                             ->required()
                             ->numeric()
                             ->minValue(1)
                             ->maxValue(20)
                             ->default(5)
-                            ->placeholder('Enter number of questions to generate'),
-                        Textarea::make('prompt')
-                            ->label('Prompt')
+                            ->placeholder('Masukkan jumlah soal yang ingin dibuat (1-20)'),
+                        Textarea::make('topic')
+                            ->label('Topik')
                             ->required()
-                            ->placeholder('Enter your prompt for AI to generate questions'),
+                            ->placeholder('e.g., Matematika, Sejarah, Sains, dll.')
+                            ->helperText('Tentukan subjek atau topik untuk Soal'),
+                        Textarea::make('additional_context')
+                            ->label('Konteks Tambahan (Opsional)')
+                            ->placeholder('Persyaratan spesifik, tingkat kesulitan, atau konteks tambahan')
+                            ->helperText('Opsional: Tambahkan persyaratan atau konteks spesifik untuk menghasilkan Soal yang lebih baik'),
                     ])
                     ->action(function (array $data) {
                         if (! config('gemini.api_key')) {
                             Notification::make()
                                 ->title('Gemini API Key not found!')
-                                ->body('Please contact developer to report this issue.')
+                                ->body('Terjadi kesalahan, silakan hubungi administrator.')
                                 ->danger()
                                 ->send();
 
                             return;
                         }
 
-                        $prompt = "Buatkan saya {$data['quantity_questions']} soal pilihan ganda tentang '{$data['prompt']}'.
-                            Setiap soal harus memiliki 4 pilihan jawaban.
+                        $additionalContext = $data['additional_context'] ? " Konteks tambahan: {$data['additional_context']}" : '';
+                        $prompt = "Buatkan saya {$data['quantity_questions']} soal pilihan ganda tentang '{$data['topic']}'.{$additionalContext}
+                            Setiap soal harus memiliki 4 pilihan jawaban (A, B, C, D).
                             Hanya ada SATU jawaban yang benar untuk setiap soal.
-                            Tolong berikan jawaban HANYA dalam format JSON yang valid, tanpa teks atau markdown tambahan. Strukturnya harus seperti ini:
+                            Untuk jawaban yang benar, berikan penjelasan mengapa jawaban tersebut benar.
+                            
+                            Format JSON yang diharapkan (tanpa markdown atau teks tambahan):
                             [
                                 {
-                                    \"question_text\": \"Teks pertanyaan di sini\",
+                                    \"question_text\": \"Teks pertanyaan yang jelas dan spesifik\",
                                     \"options\": [
-                                        {\"option_text\": \"Teks pilihan A\", \"is_correct\": false},
-                                        {\"option_text\": \"Teks pilihan B (jawaban benar)\", \"is_correct\": true},
-                                        {\"option_text\": \"Teks pilihan C\", \"is_correct\": false},
-                                        {\"option_text\": \"Teks pilihan D\", \"is_correct\": false}
+                                        {\"option_text\": \"Pilihan A\", \"is_correct\": false, \"explanation\": null},
+                                        {\"option_text\": \"Pilihan B (jawaban benar)\", \"is_correct\": true, \"explanation\": \"Penjelasan lengkap mengapa jawaban ini benar\"},
+                                        {\"option_text\": \"Pilihan C\", \"is_correct\": false, \"explanation\": null},
+                                        {\"option_text\": \"Pilihan D\", \"is_correct\": false, \"explanation\": null}
                                     ]
                                 }
-                            ]";
+                            ]
+                            
+                            Pastikan:
+                            1. Pertanyaan berkualitas dan tidak ambigu
+                            2. Pilihan jawaban masuk akal dan menantang
+                            3. Penjelasan jawaban benar informatif dan edukatif
+                            4. Hanya satu jawaban benar per soal";
 
                         try {
                             $result = Gemini::generativeModel(model: 'gemini-2.0-flash')->generateContent($prompt);
@@ -141,26 +162,47 @@ class QuestionsRelationManager extends RelationManager
                                 throw new \Exception('Failed to decode JSON from AI response. Response: '.$jsonResponse);
                             }
 
+                            $createdCount = 0;
                             foreach ($generatedQuestions as $questionData) {
+                                if (! isset($questionData['question_text']) || ! isset($questionData['options'])) {
+                                    continue;
+                                }
+
                                 $question = $this->getOwnerRecord()->questions()->create([
                                     'question_text' => $questionData['question_text'],
                                 ]);
 
-                                if (isset($questionData['options']) && is_array($questionData['options'])) {
-                                    $question->options()->createMany($questionData['options']);
+                                if (is_array($questionData['options'])) {
+                                    foreach ($questionData['options'] as $optionData) {
+                                        $question->options()->create([
+                                            'option_text' => $optionData['option_text'],
+                                            'is_correct' => $optionData['is_correct'] ?? false,
+                                            'explanation' => $optionData['explanation'] ?? null,
+                                        ]);
+                                    }
+                                    $createdCount++;
                                 }
                             }
 
-                            Notification::make()
-                                ->title('Questions generated successfully!')
-                                ->success()
-                                ->send();
+                            if ($createdCount > 0) {
+                                Notification::make()
+                                    ->title('Berhasil membuat soal')
+                                    ->body("Berhasil membuat {$createdCount} soal dengan penjelasan.")
+                                    ->success()
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('Tidak ada soal yang dibuat')
+                                    ->body('Format respons AI tidak valid. Silakan coba lagi.')
+                                    ->warning()
+                                    ->send();
+                            }
 
                         } catch (\Exception $e) {
                             Log::error('Gemini AI Error: '.$e->getMessage());
                             Notification::make()
-                                ->title('Failed to generate questions.')
-                                ->body('Please check the log for details.')
+                                ->title('Gagal membuat soal.')
+                                ->body('Silakan periksa log untuk detailnya atau coba lagi.')
                                 ->danger()
                                 ->send();
                         }

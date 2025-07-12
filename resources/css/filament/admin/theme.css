@@ -170,7 +170,7 @@
    ======================================== */
 
 /* Icon Buttons (e.g., collapse button) */
-.fi-icon-btn {
+.fi-sidebar .fi-icon-btn {
     @apply text-white 
            hover:text-sky-100 
            focus:text-sky-100 

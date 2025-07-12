@@ -124,7 +124,7 @@ class QuizAttemptController extends Controller
             try {
                 $answer = UserAnswer::updateOrCreate(
                     [
-                        'quiz_attempt_id' => $attempt->uuid,
+                        'quiz_attempt_id' => $attempt->id,
                         'question_id' => $validated['question_id'],
                     ],
                     [

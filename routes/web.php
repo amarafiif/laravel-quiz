@@ -22,5 +22,6 @@ Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.me
     Route::get('/quiz/attempt/{attempt:uuid}', [QuizAttemptController::class, 'showAttempt'])->name('quiz.attempt');
     Route::post('/quiz/attempt/{attempt}/answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.answer');
     Route::post('/quiz/attempt/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
-    Route::get('/quiz/result/{attempt:uuid}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');
 });
+
+Route::get('/quiz/result/{attempt:uuid}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');

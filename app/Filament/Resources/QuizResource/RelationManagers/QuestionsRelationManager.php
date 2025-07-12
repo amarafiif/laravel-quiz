@@ -8,6 +8,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
@@ -16,6 +17,8 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Gemini\Laravel\Facades\Gemini;
+use Illuminate\Support\Facades\Log;
 
 class QuestionsRelationManager extends RelationManager
 {
@@ -102,8 +105,65 @@ class QuestionsRelationManager extends RelationManager
                             ->required()
                             ->placeholder('Enter your prompt for AI to generate questions'),
                     ])
-                    ->action(function () {
-                        // Logic to generate questions with AI
+                    ->action(function (array $data) {
+                        if (! config('gemini.api_key')) {
+                            Notification::make()
+                                ->title('Gemini API Key not found!')
+                                ->body('Please contact developer to report this issue.')
+                                ->danger()
+                                ->send();
+
+                            return;
+                        }
+
+                        $prompt = "Buatkan saya {$data['quantity_questions']} soal pilihan ganda tentang '{$data['prompt']}'.
+                            Setiap soal harus memiliki 4 pilihan jawaban.
+                            Hanya ada SATU jawaban yang benar untuk setiap soal.
+                            Tolong berikan jawaban HANYA dalam format JSON yang valid, tanpa teks atau markdown tambahan. Strukturnya harus seperti ini:
+                            [
+                                {
+                                    \"question_text\": \"Teks pertanyaan di sini\",
+                                    \"options\": [
+                                        {\"option_text\": \"Teks pilihan A\", \"is_correct\": false},
+                                        {\"option_text\": \"Teks pilihan B (jawaban benar)\", \"is_correct\": true},
+                                        {\"option_text\": \"Teks pilihan C\", \"is_correct\": false},
+                                        {\"option_text\": \"Teks pilihan D\", \"is_correct\": false}
+                                    ]
+                                }
+                            ]";
+
+                        try {
+                            $result = Gemini::generativeModel(model: 'gemini-2.0-flash')->generateContent($prompt);
+                            $jsonResponse = preg_replace('/^```json\s*|\s*```$/', '', $result->text());
+                            $generatedQuestions = json_decode($jsonResponse, true);
+
+                            if (json_last_error() !== JSON_ERROR_NONE || ! is_array($generatedQuestions)) {
+                                throw new \Exception('Failed to decode JSON from AI response. Response: '.$jsonResponse);
+                            }
+
+                            foreach ($generatedQuestions as $questionData) {
+                                $question = $this->getOwnerRecord()->questions()->create([
+                                    'question_text' => $questionData['question_text'],
+                                ]);
+
+                                if (isset($questionData['options']) && is_array($questionData['options'])) {
+                                    $question->options()->createMany($questionData['options']);
+                                }
+                            }
+
+                            Notification::make()
+                                ->title('Questions generated successfully!')
+                                ->success()
+                                ->send();
+
+                        } catch (\Exception $e) {
+                            Log::error('Gemini AI Error: '.$e->getMessage());
+                            Notification::make()
+                                ->title('Failed to generate questions.')
+                                ->body('Please check the log for details.')
+                                ->danger()
+                                ->send();
+                        }
                     }),
             ])
             ->actions([

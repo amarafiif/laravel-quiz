@@ -178,7 +178,7 @@ class QuizAttemptController extends Controller
     private function calculateScore(QuizAttempt $attempt)
     {
         $totalQuestions = $attempt->quiz->questions()->count();
-        $correctAnswers = UserAnswer::where('quiz_attempt_id', $attempt->uuid)
+        $correctAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->where('is_correct', true)
             ->count();
 

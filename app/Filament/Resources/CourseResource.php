@@ -3,13 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CourseResource\Pages;
-use App\Filament\Resources\CourseResource\RelationManagers;
 use App\Filament\Resources\CourseResource\RelationManagers\QuizzesRelationManager;
 use App\Models\Course;
-use Filament\Forms;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -21,9 +20,8 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use PhpParser\Node\Stmt\Label;
+use Illuminate\Support\HtmlString;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class CourseResource extends Resource
 {
@@ -31,33 +29,54 @@ class CourseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Fieldset::make('Informasi Dasar')
+                Section::make('Informasi Dasar')
+                    ->columns(1)
+                    ->collapsible()
                     ->schema([
-                        TextInput::make('code')
-                            ->label('Kode Course')
-                            ->visibleOn('view'),
-                        TextInput::make('name')
-                            ->label('Nama Course')
-                            ->required(),
+                        Grid::make(2)
+                            ->schema([
+                                TextInput::make('code')
+                                    ->label('Kode Course')
+                                    ->disabledOn('edit'),
+                                TextInput::make('name')
+                                    ->label('Nama Course')
+                                    ->required(),
+                            ]),
                         MarkdownEditor::make('description')
                             ->label('Deskripsi Course')
                             ->required(),
                         FileUpload::make('thumbnail')
-                            ->label('Thumbnail Course')
+                            ->label('Thumbnail')
                             ->image()
-                            ->directory('thumbnail/course')
+                            ->directory('courses/thumbnails')
+                            ->getUploadedFileNameForStorageUsing(
+                                fn (TemporaryUploadedFile $file, $get): string => 'thumb-'.str($get('name') ?? '')
+                                    ->slug().'-'.($get('code') ?? '').'.'.$file->getClientOriginalExtension()
+                            )
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('16:9')
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
-                            ->required()
-                    ])->columns(1),
+                            ->hint(new HtmlString(
+                                '1920x1080 piksel. Ukuran file maksimal 2MB.'
+                            ))
+                            ->hintColor('warning')
+                            ->optimize('webp')
+                            ->required(),
+                    ]),
 
-                Fieldset::make('Pengaturan')
+                Section::make('Pengaturan')
+                    ->columns(2)
+                    ->collapsible()
                     ->schema([
                         Toggle::make('is_active')
                             ->label('Aktifkan Course')
@@ -67,7 +86,8 @@ class CourseResource extends Resource
                             ->label('Publish Course')
                             ->helperText('Atur untuk menampilkan course agar dapat tampil disemua halaman.')
                             ->inline(false),
-                    ])
+                    ]),
+
             ]);
     }
 
@@ -81,19 +101,19 @@ class CourseResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('code')
-                    ->label('Kode Course')
+                    ->label('Kode')
                     ->badge()
                     ->sortable()
                     ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 ImageColumn::make('thumbnail')
                     ->label('Thumbnail'),
                 TextColumn::make('name')
-                    ->label('Nama Course')
+                    ->label('Nama Kursus')
                     ->searchable()
                     ->sortable(),
                 ToggleColumn::make('is_active')
-                    ->label('Status'),
+                    ->label('Status Aktif'),
                 ToggleColumn::make('is_publish')
                     ->label('Visibilitas'),
                 TextColumn::make('created_at')
@@ -105,7 +125,8 @@ class CourseResource extends Resource
                     ->label('Terakhir diperbarui')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->dateTime()
+                    ->toggleable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->filters([
@@ -120,11 +141,10 @@ class CourseResource extends Resource
                             ->danger()
                             ->title('Akses Ditolak')
                             ->body('Anda tidak diizinkan untuk menghapus data ini!')
-                            ->duration(5000)
                             ->send();
 
                         $action->cancel();
-                    })
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -145,7 +165,8 @@ class CourseResource extends Resource
     {
         return [
             'index' => Pages\ListCourses::route('/'),
-            'view' => Pages\ViewCourse::route('/{record}')
+            'view' => Pages\ViewCourse::route('/{record}'),
+            'edit' => Pages\EditCourse::route('/{record}/edit'),
         ];
     }
 }

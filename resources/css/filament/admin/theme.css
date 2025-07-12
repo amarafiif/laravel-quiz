@@ -2,71 +2,108 @@
 
 @config 'tailwind.config.js';
 
-/* Sidebar Header Section */
-.fi-sidebar-header {
-    @apply bg-blue-900 text-white border-b-2 border-slate-100/30 !important;
+/* ========================================
+   SIDEBAR STRUCTURE & LAYOUT
+   ======================================== */
+
+/* Main Sidebar Container */
+.fi-sidebar {
+    @apply bg-sky-600 border-r border-sky-500 !important;
 }
 
+/* Sidebar Navigation Container */
+.fi-sidebar-nav {
+    @apply bg-sky-600 !important;
+}
+
+/* ========================================
+   SIDEBAR HEADER SECTION
+   ======================================== */
+
+/* Header Background & Border */
+.fi-sidebar-header {
+    @apply bg-sky-600 text-white border-b-2 border-slate-100/30 !important;
+}
+
+/* Logo Styling */
 .fi-logo {
     @apply text-white font-semibold !important;
 }
 
-.fi-sidebar {
-    @apply bg-blue-900 border-r border-blue-800 !important;
-}
+/* ========================================
+   SIDEBAR NAVIGATION ITEMS
+   ======================================== */
 
-.fi-sidebar-nav {
-    @apply bg-blue-900 !important;
-}
-
-/* Sidebar Items */
+/* Base Item Container */
 .fi-sidebar-item {
-    @apply text-blue-100 rounded-lg transition-all duration-150 !important;
+    @apply text-white rounded-lg transition-all duration-150 !important;
 }
 
+/* Item Button - Default State */
 .fi-sidebar-item-button {
-    @apply hover:bg-blue-800 
-           hover:text-white 
-           focus:bg-blue-800 
-           focus:text-white 
-           active:bg-blue-700 
-           active:text-white
+    @apply bg-transparent
+           p-3
+           rounded-lg
            transition-all
            duration-150
-           rounded-lg
            !important;
 }
 
-.fi-sidebar-item-button,
+/* Item Button - Interactive States */
 .fi-sidebar-item-button:hover,
 .fi-sidebar-item-button:focus-visible {
-    @apply bg-transparent hover:bg-blue-800 dark:hover:bg-blue-800 
-           focus-visible:bg-blue-800 dark:focus-visible:bg-blue-800 
+    @apply bg-sky-500 
+           text-white
            !important;
 }
 
-/* Sidebar Item Icons */
+.fi-sidebar-item-button:active {
+    @apply bg-sky-500 
+           text-white
+           !important;
+}
+
+/* ========================================
+   SIDEBAR ITEM COMPONENTS
+   ======================================== */
+
+/* Icons */
 .fi-sidebar-item-icon {
-    @apply text-slate-300 
-           transition-colors 
-           duration-150 
+    @apply text-white 
            w-5 
            h-5
+           transition-colors 
+           duration-150 
            !important;
 }
 
-/* Sidebar Item Labels */
+/* Labels/Text */
 .fi-sidebar-item-label {
-    @apply text-slate-300 
+    @apply text-white 
            font-medium
            transition-colors
            duration-150
            !important;
 }
 
-/* Active State */
+/* Badges/Counters */
+.fi-sidebar-item-button .fi-badge {
+    @apply bg-sky-500 
+           text-white 
+           rounded-md 
+           px-2 py-1 
+           text-xs
+           font-semibold 
+           !important;
+}
+
+/* ========================================
+   SIDEBAR ITEM STATES
+   ======================================== */
+
+/* Active/Current Page State */
 .fi-sidebar-item-active {
-    @apply bg-blue-800 !important;
+    @apply bg-sky-500 !important;
 }
 
 .fi-sidebar-item-active .fi-sidebar-item-label,
@@ -74,14 +111,18 @@
     @apply text-white font-semibold !important;
 }
 
-/* Group Labels */
-.fi-sidebar-group-label {
-    @apply text-blue-300 
-           font-medium 
-           uppercase 
-           text-xs 
-           tracking-wider 
-           !important;
+.fi-sidebar-item-active .fi-sidebar-item-button .fi-badge {
+    @apply bg-sky-400 text-white !important;
+}
+
+/* Selected State */
+.fi-sidebar-item-selected {
+    @apply bg-sky-600 !important;
+}
+
+.fi-sidebar-item-selected .fi-sidebar-item-label,
+.fi-sidebar-item-selected .fi-sidebar-item-icon {
+    @apply text-white !important;
 }
 
 /* Hover States */
@@ -90,33 +131,62 @@
     @apply text-white !important;
 }
 
+.fi-sidebar-item:hover .fi-sidebar-item-button .fi-badge {
+    @apply bg-sky-400 text-white !important;
+}
+
 /* Focus States */
 .fi-sidebar-item:focus-within .fi-sidebar-item-label,
 .fi-sidebar-item:focus-within .fi-sidebar-item-icon {
     @apply text-white !important;
 }
 
-/* Dividers */
+/* ========================================
+   SIDEBAR GROUPS & ORGANIZATION
+   ======================================== */
+
+/* Group Labels/Headers */
+.fi-sidebar-group-label {
+    @apply text-white 
+           font-semibold 
+           text-xs
+           uppercase
+           tracking-wider 
+           !important;
+}
+
+/* Group Containers */
 .fi-sidebar-group {
-    @apply border-blue-800 !important;
+    @apply border-sky-500 !important;
 }
 
-/* Current/Selected Item */
-.fi-sidebar-item-selected {
-    @apply bg-blue-700 !important;
-}
-
-.fi-sidebar-item-selected .fi-sidebar-item-label,
-.fi-sidebar-item-selected .fi-sidebar-item-icon {
-    @apply text-white !important;
-}
-
-/* Collapsible Group */
+/* Collapsible Group Items */
 .fi-sidebar-group-items {
     @apply space-y-1 !important;
 }
 
-/* Sub-items padding */
-/* .fi-sidebar-group-items .fi-sidebar-item {
+/* ========================================
+   UTILITY COMPONENTS
+   ======================================== */
+
+/* Icon Buttons (e.g., collapse button) */
+.fi-sidebar .fi-icon-btn {
+    @apply text-white 
+           hover:text-sky-100 
+           focus:text-sky-100 
+           active:text-sky-100 
+           !important;
+}
+
+/* ========================================
+   FUTURE CUSTOMIZATIONS
+   ======================================== */
+
+/* Sub-items indentation - Currently disabled */
+/* 
+.fi-sidebar-group-items .fi-sidebar-item {
     @apply ml-3 !important;
-} */
+}
+*/
+
+/* Additional customization space for future needs */

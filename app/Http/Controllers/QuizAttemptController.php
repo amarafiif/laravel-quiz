@@ -45,7 +45,7 @@ class QuizAttemptController extends Controller
             ->first();
 
         if ($activeAttempt) {
-            return redirect()->route('quiz.attempt', $activeAttempt->id);
+            return redirect()->route('quiz.attempt', $activeAttempt->uuid);
         }
 
         $now = now();
@@ -60,7 +60,7 @@ class QuizAttemptController extends Controller
             'score' => null,
         ]);
 
-        return redirect()->route('quiz.attempt', $attempt->id);
+        return redirect()->route('quiz.attempt', $attempt->uuid);
     }
 
     public function showAttempt(QuizAttempt $attempt)
@@ -70,18 +70,18 @@ class QuizAttemptController extends Controller
         }
 
         if ($attempt->is_completed) {
-            return redirect()->route('quiz.result', $attempt->id)->with('info', 'Kuis ini sudah selesai dikerjakan.');
+            return redirect()->route('quiz.result', $attempt->uuid)->with('info', 'Kuis ini sudah selesai dikerjakan.');
         }
 
         if ($attempt->ends_at < now()) {
             $this->submitAutomatically($attempt);
 
-            return redirect()->route('quiz.result', $attempt->id)->with('warning', 'Waktu pengerjaan telah habis.');
+            return redirect()->route('quiz.result', $attempt->uuid)->with('warning', 'Waktu pengerjaan telah habis.');
         }
 
         $questions = $attempt->quiz->questions()->with('options')->orderBy('id')->get();
         $remainingTime = max(0, (int) now()->diffInSeconds($attempt->ends_at));
-        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
+        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->uuid)
             ->pluck('selected_option_id', 'question_id')
             ->toArray();
 
@@ -124,7 +124,7 @@ class QuizAttemptController extends Controller
             try {
                 $answer = UserAnswer::updateOrCreate(
                     [
-                        'quiz_attempt_id' => $attempt->id,
+                        'quiz_attempt_id' => $attempt->uuid,
                         'question_id' => $validated['question_id'],
                     ],
                     [
@@ -168,7 +168,7 @@ class QuizAttemptController extends Controller
     public function showResult(QuizAttempt $attempt)
     {
         $questions = $attempt->quiz->questions()->with('options')->get();
-        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
+        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->uuid)
             ->get()
             ->keyBy('question_id');
 
@@ -178,7 +178,7 @@ class QuizAttemptController extends Controller
     private function calculateScore(QuizAttempt $attempt)
     {
         $totalQuestions = $attempt->quiz->questions()->count();
-        $correctAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
+        $correctAnswers = UserAnswer::where('quiz_attempt_id', $attempt->uuid)
             ->where('is_correct', true)
             ->count();
 

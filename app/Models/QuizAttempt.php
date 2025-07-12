@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class QuizAttempt extends Model
 {
+    use HasFactory, HasUuids;
+
     protected $fillable = [
         'user_id',
         'quiz_id',
@@ -15,21 +19,26 @@ class QuizAttempt extends Model
         'ends_at',
         'submitted_at',
         'score',
-        'is_completed'
+        'is_completed',
     ];
 
     protected $casts = [
         'started_at' => 'datetime',
         'ends_at' => 'datetime',
         'submitted_at' => 'datetime',
-        'is_completed' => 'boolean'
+        'is_completed' => 'boolean',
     ];
 
     protected $dates = [
         'started_at',
         'ends_at',
-        'submitted_at'
+        'submitted_at',
     ];
+
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
+    }
 
     public function quiz(): BelongsTo
     {

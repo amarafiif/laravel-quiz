@@ -34,13 +34,19 @@
                                     <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{{ $item->score }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{{ Carbon\Carbon::parse($item->started_at)->format('d M Y H:i') }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                                        <a href="{{ route('quiz.result', $item->id) }}">
-                                            <svg class="rounded-xl text-blue-500 hover:bg-blue-50 hover:text-blue-700" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
-                                                <path fill="currentColor" fill-opacity="0.25"
-                                                    d="M20.188 10.934c.388.472.582.707.582 1.066s-.194.594-.582 1.066C18.768 14.79 15.636 18 12 18s-6.768-3.21-8.188-4.934c-.388-.472-.582-.707-.582-1.066s.194-.594.582-1.066C5.232 9.21 8.364 6 12 6s6.768 3.21 8.188 4.934" />
-                                                <circle cx="12" cy="12" r="3" fill="currentColor" />
-                                            </svg>
-                                        </a>
+                                        @if ($item->submitted_at)
+                                            <a href="{{ route('quiz.result', $item->uuid) }}">
+                                                <svg class="rounded-xl text-blue-500 hover:bg-blue-50 hover:text-blue-700" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                                                    <path fill="currentColor" fill-opacity="0.25"
+                                                        d="M20.188 10.934c.388.472.582.707.582 1.066s-.194.594-.582 1.066C18.768 14.79 15.636 18 12 18s-6.768-3.21-8.188-4.934c-.388-.472-.582-.707-.582-1.066s.194-.594.582-1.066C5.232 9.21 8.364 6 12 6s6.768 3.21 8.188 4.934" />
+                                                    <circle cx="12" cy="12" r="3" fill="currentColor" />
+                                                </svg>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('quiz.attempt', $item->uuid) }}" class="text-blue-500 hover:text-blue-700">
+                                                Lanjutkan Kuis
+                                            </a>
+                                        @endif
                                     </td>
                                 </tr>
                             </tbody>

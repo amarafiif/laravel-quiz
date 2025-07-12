@@ -9,7 +9,6 @@ use App\Models\UserAnswer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class QuizAttemptController extends Controller
 {
@@ -36,8 +35,7 @@ class QuizAttemptController extends Controller
             ->first();
 
         if ($previousAttempt && ! $quiz->is_allowed_repeat) {
-            return redirect()->back()
-                ->with('error', 'Anda sudah mengerjakan kuis ini dan tidak diizinkan untuk mengulangi.');
+            return redirect()->back()->with('error', 'Anda sudah mengerjakan kuis ini dan tidak diizinkan untuk mengulangi.');
         }
 
         $activeAttempt = QuizAttempt::where('user_id', Auth::id())
@@ -72,17 +70,16 @@ class QuizAttemptController extends Controller
         }
 
         if ($attempt->is_completed) {
-            return redirect()->route('quiz.result', $attempt->id)
-                ->with('info', 'Kuis ini sudah selesai dikerjakan.');
+            return redirect()->route('quiz.result', $attempt->id)->with('info', 'Kuis ini sudah selesai dikerjakan.');
         }
 
         if ($attempt->ends_at < now()) {
             $this->submitAutomatically($attempt);
 
-            return redirect()->route('quiz.result', $attempt->id)
-                ->with('warning', 'Waktu pengerjaan telah habis.');
-        }        $questions = $attempt->quiz->questions()->with('options')->orderBy('id')->get();
+            return redirect()->route('quiz.result', $attempt->id)->with('warning', 'Waktu pengerjaan telah habis.');
+        }
 
+        $questions = $attempt->quiz->questions()->with('options')->orderBy('id')->get();
         $remainingTime = max(0, (int) now()->diffInSeconds($attempt->ends_at));
         $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->pluck('selected_option_id', 'question_id')
@@ -159,23 +156,18 @@ class QuizAttemptController extends Controller
         }
 
         if ($attempt->is_completed) {
-            return redirect()->route('quiz.result', $attempt->id);
+            return redirect()->route('quiz.result', $attempt->uuid);
         }
 
         $this->calculateScore($attempt);
 
-        return redirect()->route('quiz.result', $attempt->id)
+        return redirect()->route('quiz.result', $attempt->uuid)
             ->with('success', 'Kuis berhasil diselesaikan!');
     }
 
     public function showResult(QuizAttempt $attempt)
     {
-        if ($attempt->user_id !== Auth::id()) {
-            abort(403);
-        }
-
         $questions = $attempt->quiz->questions()->with('options')->get();
-
         $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->get()
             ->keyBy('question_id');
@@ -186,16 +178,11 @@ class QuizAttemptController extends Controller
     private function calculateScore(QuizAttempt $attempt)
     {
         $totalQuestions = $attempt->quiz->questions()->count();
-        Log::info('Total Questions: '.$totalQuestions);
-
         $correctAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->where('is_correct', true)
             ->count();
-        Log::info('Correct Answers: '.$correctAnswers);
 
         $score = $totalQuestions > 0 ? ($correctAnswers / $totalQuestions) * 100 : 0;
-        Log::info('Calculated Score: '.$score);
-
         $attempt->update([
             'score' => $score,
             'is_completed' => true,

@@ -12,7 +12,6 @@ Route::get('/', function () {
 // })->name('dashboard');
 
 Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.member', 'verified'])->group(function () {
-
     Route::get('/dashboard', [QuizAttemptController::class, 'history'])->name('dashboard');
     Route::prefix('courses')->group(function () {
         Route::get('/', [CourseController::class, 'index'])->name('courses.index');
@@ -20,8 +19,8 @@ Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.me
     });
 
     Route::get('/quiz/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
-    Route::get('/quiz/attempt/{attempt}', [QuizAttemptController::class, 'showAttempt'])->name('quiz.attempt');
+    Route::get('/quiz/attempt/{attempt:uuid}', [QuizAttemptController::class, 'showAttempt'])->name('quiz.attempt');
     Route::post('/quiz/attempt/{attempt}/answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.answer');
     Route::post('/quiz/attempt/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');
-    Route::get('/quiz/result/{attempt}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');
+    Route::get('/quiz/result/{attempt:uuid}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');
 });

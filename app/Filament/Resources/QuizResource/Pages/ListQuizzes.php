@@ -13,7 +13,9 @@ class ListQuizzes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Kuis')
+                ->icon('heroicon-o-document-text'),
         ];
     }
 }

@@ -20,6 +20,8 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\HtmlString;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class CourseResource extends Resource
 {
@@ -53,13 +55,22 @@ class CourseResource extends Resource
                             ->label('Deskripsi Course')
                             ->required(),
                         FileUpload::make('thumbnail')
-                            ->label('Thumbnail Course')
+                            ->label('Thumbnail')
                             ->image()
-                            ->directory('thumbnail/course')
+                            ->directory('courses/thumbnails')
+                            ->getUploadedFileNameForStorageUsing(
+                                fn (TemporaryUploadedFile $file, $get): string => 'thumb-'.str($get('name') ?? '')
+                                    ->slug().'-'.($get('code') ?? '').'.'.$file->getClientOriginalExtension()
+                            )
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('16:9')
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
+                            ->hint(new HtmlString(
+                                '1920x1080 piksel. Ukuran file maksimal 2MB.'
+                            ))
+                            ->hintColor('warning')
+                            ->optimize('webp')
                             ->required(),
                     ]),
 

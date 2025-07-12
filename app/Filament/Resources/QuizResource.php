@@ -18,6 +18,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class QuizResource extends Resource
 {
@@ -60,9 +61,13 @@ class QuizResource extends Resource
                                 'undo',
                             ]),
                         FileUpload::make('thumbnail')
-                            ->label('Thumbnail Kuis')
+                            ->label('Thumbnail')
                             ->image()
-                            ->directory('thumbnail/quiz')
+                            ->directory('quizzes/thumbnails')
+                            ->getUploadedFileNameForStorageUsing(
+                                fn (TemporaryUploadedFile $file, $get): string => 'thumb-'.str($get('name') ?? '')
+                                    ->slug().'-'.($get('code') ?? '').'.'.$file->getClientOriginalExtension()
+                            )
                             ->imageResizeMode('cover')
                             ->imageCropAspectRatio('16:9')
                             ->imageResizeTargetWidth('1920')
@@ -71,6 +76,7 @@ class QuizResource extends Resource
                                 '1920x1080 piksel. Ukuran file maksimal 2MB.'
                             ))
                             ->hintColor('warning')
+                            ->optimize('webp')
                             ->required(),
                     ]),
 

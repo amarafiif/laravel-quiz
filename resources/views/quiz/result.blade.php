@@ -148,40 +148,39 @@
 
                                             <!-- Statistics -->
                                             <div class="grid grid-cols-3 gap-0">
-                                                <!-- Empty Answers -->
+                                                <!-- Unanswered Questions -->
                                                 <div class="rounded-lg p-4">
                                                     <div class="mb-2 flex items-center justify-center">
-                                                        <svg class="h-6 w-6 text-slate-500" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                                clip-rule="evenodd">
-                                                            </path>
+                                                        <svg class="h-6 w-6 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                                clip-rule="evenodd"></path>
                                                         </svg>
                                                     </div>
-                                                    <div class="text-2xl font-bold text-slate-600">{{ $questions->count() - $userAnswers->count() }}</div>
+                                                    <div class="text-2xl font-bold text-amber-600">{{ $statistics['unanswered'] }}</div>
                                                     <div class="text-sm text-gray-600">Kosong</div>
                                                 </div>
 
                                                 <!-- Correct Answers -->
                                                 <div class="border-x border-slate-200 p-4">
                                                     <div class="mb-2 flex items-center justify-center">
-                                                        <svg class="h-6 w-6 text-slate-500" fill="currentColor" viewBox="0 0 20 20">
+                                                        <svg class="h-6 w-6 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                         </svg>
                                                     </div>
-                                                    <div class="text-2xl font-bold text-slate-600">{{ $userAnswers->where('is_correct', true)->count() }}</div>
+                                                    <div class="text-2xl font-bold text-emerald-600">{{ $statistics['correct'] }}</div>
                                                     <div class="text-sm text-gray-600">Benar</div>
                                                 </div>
 
                                                 <!-- Wrong Answers -->
                                                 <div class="rounded-lg p-4">
                                                     <div class="mb-2 flex items-center justify-center">
-                                                        <svg class="h-6 w-6 text-slate-500" fill="currentColor" viewBox="0 0 20 20">
+                                                        <svg class="h-6 w-6 text-rose-500" fill="currentColor" viewBox="0 0 20 20">
                                                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                                                                 clip-rule="evenodd">
                                                             </path>
                                                         </svg>
                                                     </div>
-                                                    <div class="text-2xl font-bold text-slate-600">{{ $questions->count() - $userAnswers->where('is_correct', true)->count() }}</div>
+                                                    <div class="text-2xl font-bold text-rose-600">{{ $statistics['wrong'] }}</div>
                                                     <div class="text-sm text-gray-600">Salah</div>
                                                 </div>
                                             </div>

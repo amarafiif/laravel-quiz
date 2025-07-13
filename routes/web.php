@@ -13,9 +13,10 @@ Route::get('/', function () {
 
 Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.member', 'verified'])->group(function () {
     Route::get('/dashboard', [QuizAttemptController::class, 'history'])->name('dashboard');
+
     Route::prefix('courses')->group(function () {
         Route::get('/', [CourseController::class, 'index'])->name('courses.index');
-        Route::get('/{id}', [CourseController::class, 'show'])->name('courses.show');
+        Route::get('/{code}', [CourseController::class, 'findByCode'])->name('courses.show');
     });
 
     Route::get('/quiz/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');

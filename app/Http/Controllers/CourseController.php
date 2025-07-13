@@ -19,10 +19,13 @@ class CourseController extends Controller
         ]);
     }
 
-    public function show(string $id)
+    public function findByCode(string $code)
     {
         $course = Course::with('quizzes')
-            ->findOrFail($id);
+            ->where('code', $code)
+            ->where('is_active', true)
+            ->where('is_publish', true)
+            ->firstOrFail();
 
         return view('courses.show', [
             'course' => new CourseResource($course),

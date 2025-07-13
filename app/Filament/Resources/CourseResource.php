@@ -43,14 +43,25 @@ class CourseResource extends Resource
                     ->collapsible()
                     ->schema([
                         Grid::make(2)
+                            ->visibleOn(['edit', 'view'])
                             ->schema([
                                 TextInput::make('code')
                                     ->label('Kode Course')
                                     ->disabledOn('edit'),
-                                TextInput::make('name')
-                                    ->label('Nama Course')
-                                    ->required(),
                             ]),
+                        TextInput::make('name')
+                            ->label('Nama Course')
+                            ->required()
+                            ->placeholder('Sejarah Indonesia')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', str($state)->slug())),
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->placeholder('sejarah-indonesia')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->disabledOn('edit'),
                         MarkdownEditor::make('description')
                             ->label('Deskripsi Course')
                             ->required(),
@@ -67,7 +78,7 @@ class CourseResource extends Resource
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
                             ->hint(new HtmlString(
-                                '1920x1080 piksel. Ukuran file maksimal 2MB.'
+                                '1920x1080px'
                             ))
                             ->hintColor('warning')
                             ->optimize('webp')
@@ -103,6 +114,7 @@ class CourseResource extends Resource
                 TextColumn::make('code')
                     ->label('Kode')
                     ->badge()
+                    ->copyable()
                     ->sortable()
                     ->searchable()
                     ->toggleable(),

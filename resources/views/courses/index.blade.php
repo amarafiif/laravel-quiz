@@ -24,7 +24,7 @@
                                     </p>
                                 </div>
                                 <div class="w-3/12 content-center justify-items-center">
-                                    <a href="{{ route('courses.show', $item->id) }}" class="ms-4 flex rounded-md bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-400 hover:text-slate-800 focus:bg-slate-400 focus:text-slate-800 active:bg-slate-400">
+                                    <a href="{{ route('courses.show', $item->code) }}" class="ms-4 flex rounded-md bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-400 hover:text-slate-800 focus:bg-slate-400 focus:text-slate-800 active:bg-slate-400">
                                         Lanjutkan Kursus
                                     </a>
                                 </div>

@@ -9,6 +9,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
@@ -35,13 +36,34 @@ class QuizResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Quiz Information')
+                Section::make('Pilih Kursus')
+                    ->columns(1)
+                    ->collapsible()
+                    ->schema([
+                        Select::make('course_id')
+                            ->label('Kursus')
+                            ->required()
+                            ->relationship('course', 'name')
+                            ->preload()
+                            ->searchable(),
+                    ]),
+                Section::make('Detail Kuis')
                     ->columns(1)
                     ->collapsible()
                     ->schema([
                         TextInput::make('name')
                             ->label('Nama Kuis')
-                            ->required(),
+                            ->required()
+                            ->placeholder('Kuis Sejarah Indonesia')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', str($state)->slug())),
+                        TextInput::make('slug')
+                            ->label('Slug')
+                            ->placeholder('kuis-sejarah-indonesia')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true)
+                            ->disabledOn('edit'),
                         MarkdownEditor::make('description')
                             ->label('Deskripsi')
                             ->maxLength(500)
@@ -73,7 +95,7 @@ class QuizResource extends Resource
                             ->imageResizeTargetWidth('1920')
                             ->imageResizeTargetHeight('1080')
                             ->hint(new HtmlString(
-                                '1920x1080 piksel. Ukuran file maksimal 2MB.'
+                                '1920x1080px    '
                             ))
                             ->hintColor('warning')
                             ->optimize('webp')
@@ -89,7 +111,7 @@ class QuizResource extends Resource
                                     ->label('Batas Waktu')
                                     ->required()
                                     ->helperText('Lama waktu pengerjaan untuk setiap percobaan kuis.')
-                                    ->default(now()->addMinutes(30)),
+                                    ->default('00:30:00'),
                                 DateTimePicker::make('deadline')
                                     ->label('Batas Akhir')
                                     ->required()

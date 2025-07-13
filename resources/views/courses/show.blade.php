@@ -10,7 +10,7 @@
             <x-alert></x-alert>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 @foreach ($course->quizzes as $item)
-                    <a href="{{ route('quiz.start', $item->id) }}" class="block">
+                    <a href="{{ route('quiz.start', $item->slug) }}" class="block">
                         <div class="transform overflow-hidden bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg sm:rounded-lg">
                             <div class="space-y-3 p-4">
                                 <div class="aspect-video overflow-hidden rounded-lg">

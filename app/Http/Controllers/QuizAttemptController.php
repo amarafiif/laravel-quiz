@@ -167,12 +167,27 @@ class QuizAttemptController extends Controller
 
     public function showResult(QuizAttempt $attempt)
     {
+
         $questions = $attempt->quiz->questions()->with('options')->get();
-        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->uuid)
+        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->get()
             ->keyBy('question_id');
 
-        return view('quiz.result', compact('attempt', 'questions', 'userAnswers'));
+        $totalQuestions = $questions->count();
+        $answeredQuestions = $userAnswers->count();
+        $correctAnswers = $userAnswers->where('is_correct', true)->count();
+        $wrongAnswers = $userAnswers->where('is_correct', false)->count();
+        $unansweredQuestions = $totalQuestions - $answeredQuestions;
+
+        $statistics = [
+            'total' => $totalQuestions,
+            'answered' => $answeredQuestions,
+            'correct' => $correctAnswers,
+            'wrong' => $wrongAnswers,
+            'unanswered' => $unansweredQuestions,
+        ];
+
+        return view('quiz.result', compact('attempt', 'questions', 'userAnswers', 'statistics'));
     }
 
     private function calculateScore(QuizAttempt $attempt)

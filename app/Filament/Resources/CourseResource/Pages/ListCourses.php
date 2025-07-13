@@ -18,17 +18,10 @@ class ListCourses extends ListRecords
                 ->label('Tambah Course')
                 ->icon('heroicon-o-book-open')
                 ->mutateFormDataUsing(function ($data) {
-                    $lastRecord = Course::orderBy('id', 'desc')->first();
+                    $data['code'] = Course::generateCode();
 
-                    if (!$lastRecord) {
-                        $data['code'] = '#LAQC000001';
-                    } else {
-                        $lastNumber = (int) substr($lastRecord->code, 5);
-                        $nextNumber = $lastNumber + 1;
-                        $data['code'] = '#LAQC' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
-                    }
                     return $data;
-                })
+                }),
         ];
     }
 }

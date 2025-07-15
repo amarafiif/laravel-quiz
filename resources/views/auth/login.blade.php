@@ -1,5 +1,8 @@
 @extends('layouts.auth')
 
+@section('header', 'Masuk ke Dashboard')
+@section('sub-header', 'Selamat datang kembali! Silakan masuk untuk melanjutkan progres belajar Anda.')
+
 @section('form-content')
     <x-validation-errors class="mb-4" />
 
@@ -36,13 +39,13 @@
                 </label>
             </div>
 
-            {{-- @if (Route::has('password.request'))
+            @if (Route::has('password.request'))
                 <div class="text-sm">
                     <a href="{{ route('password.request') }}" class="font-medium text-sky-500 hover:text-sky-600">
                         Lupa password?
                     </a>
                 </div>
-            @endif --}}
+            @endif
         </div>
 
         <div>

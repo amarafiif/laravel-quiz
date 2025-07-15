@@ -19,7 +19,7 @@ Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.me
         Route::get('/{code}', [CourseController::class, 'findByCode'])->name('courses.show');
     });
 
-    Route::get('/quiz/{quiz:slug}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
+    Route::get('/quiz/{slug}/start', [QuizAttemptController::class, 'start'])->name('quiz.start');
     Route::get('/quiz/attempt/{attempt:uuid}', [QuizAttemptController::class, 'showAttempt'])->name('quiz.attempt');
     Route::post('/quiz/attempt/{attempt}/answer', [QuizAttemptController::class, 'saveAnswer'])->name('quiz.answer');
     Route::post('/quiz/attempt/{attempt}/submit', [QuizAttemptController::class, 'submit'])->name('quiz.submit');

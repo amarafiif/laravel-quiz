@@ -1,38 +1,44 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            {{ __('Kursus Tersedia') }}
+            {{ __('Topik Tersedia') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto max-w-7xl space-y-3 sm:px-6 lg:px-8">
-            @foreach ($courses as $item)
-                <div class="overflow-hidden bg-white shadow sm:rounded-lg">
-                    <div class="border-b border-gray-200 bg-white p-6 lg:p-8">
-                        <div id="courses">
-                            <div class="flex space-x-6">
-                                <div class="w-3/12 content-center">
-                                    <img src="{{ Storage::url($item->thumbnail) }}" class="rounded-lg" alt="thumbnail">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="space-y-4">
+                @foreach ($courses as $item)
+                    <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+                        <div class="p-6">
+                            <div class="flex flex-col space-y-4 lg:flex-row lg:items-center lg:space-x-6 lg:space-y-0">
+                                <!-- Thumbnail -->
+                                <div class="mx-auto flex-shrink-0 lg:mx-0">
+                                    <img src="{{ Storage::url($item->thumbnail) }}" class="h-32 w-48 rounded-lg object-cover shadow-sm" alt="{{ $item->name }}">
                                 </div>
-                                <div class="w-6/12 content-center">
-                                    <h3 class="text-xl font-medium text-gray-900">
+
+                                <!-- Content -->
+                                <div class="flex-1 text-center lg:text-left">
+                                    <h3 class="mb-2 text-xl font-semibold text-gray-900">
                                         {{ $item->name }}
                                     </h3>
-                                    <p class="mt-5 leading-relaxed text-gray-500">
+                                    <p class="leading-relaxed text-gray-600">
                                         {{ $item->description }}
                                     </p>
                                 </div>
-                                <div class="w-3/12 content-center justify-items-center">
-                                    <a href="{{ route('courses.show', $item->code) }}" class="ms-4 flex rounded-md bg-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-400 hover:text-slate-800 focus:bg-slate-400 focus:text-slate-800 active:bg-slate-400">
-                                        Lanjutkan Kursus
+
+                                <!-- Action Button -->
+                                <div class="flex flex-shrink-0 justify-center">
+                                    <a href="{{ route('courses.show', $item->code) }}"
+                                        class="inline-flex items-center rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white transition duration-150 ease-in-out hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+                                        Lihat Kuis
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </div>
 </x-app-layout>

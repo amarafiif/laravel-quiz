@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center w-full">
+        <div class="flex w-full items-center justify-between">
             <div class="flex-shrink">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">
                     {{ $attempt->quiz->name }}
                 </h2>
             </div>
 
-            <div class="flex-shrink bg-white shadow rounded-lg py-2 px-6">
-                <p class="text-sm text-slate-500 text-center">Sisa waktu</p>
+            <div class="flex-shrink rounded-lg bg-white px-6 py-2 shadow">
+                <p class="text-center text-sm text-slate-500">Sisa waktu</p>
                 <div x-data="{
                     remainingTime: {{ $remainingTime }},
                     init() {
@@ -35,37 +35,44 @@
     </x-slot>
 
     <!-- Notification Status -->
-    <div class="fixed top-4 right-4 z-50" id="saveStatus">
-        <div class="hidden transition-all duration-300 px-4 py-2 rounded shadow-lg" id="statusAlert">
+    <div class="fixed right-4 top-4 z-50" id="saveStatus">
+        <div class="hidden rounded px-4 py-2 shadow-lg transition-all duration-300" id="statusAlert">
             <span id="saveStatusText"></span>
         </div>
     </div>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-xl sm:rounded-lg p-6 min-h-screen">
+        <div class="w-md mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="min-h-screen bg-white p-6 shadow-xl sm:rounded-lg">
                 <form id="quizForm" action="{{ route('quiz.submit', $attempt->id) }}" method="POST">
-                    @csrf                    
+                    @csrf
                     <div class="space-y-6">
                         @foreach ($questions as $question)
-                            <div class="border rounded-lg p-4" id="question-container-{{ $question->id }}">
-                                <div class="mb-3">
-                                    <h4 class="font-semibold text-md">
-                                        {{ $loop->iteration }}. {{ $question->question_text }}
-                                    </h4>
-                                    @if ($question->image)
-                                        <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" class="mt-2 max-w-md">
-                                    @endif
+                            <div class="rounded-lg border p-4 lg:p-6" id="question-container-{{ $question->id }}">
+                                <div class="mb-4">
+                                    <div class="flex items-start gap-3">
+                                        <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-800">
+                                            {{ $loop->iteration }}
+                                        </span>
+                                        <div class="min-w-0 flex-1">
+                                            <div class="prose-md prose max-w-none text-gray-800 sm:prose-base">
+                                                {!! Str::markdown($question->question_text) !!}
+                                            </div>
+                                            @if ($question->image)
+                                                <div class="mt-3">
+                                                    <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" class="w-full max-w-sm rounded-lg shadow-sm sm:max-w-md lg:max-w-lg">
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="space-y-2">
+                                <div class="ms-1 mt-2 space-y-2 border-t-2 border-dashed border-gray-200 py-4 ps-8">
                                     @foreach ($question->options as $option)
-                                        <div class="flex items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                                            <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option->id }}"
-                                                id="option_{{ $option->id }}" class="answer-radio" data-question-id="{{ $question->id }}"
-                                                onclick="console.log('Radio clicked:', { id: this.id, questionId: this.dataset.questionId, value: this.value })"
-                                                {{ isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $option->id ? 'checked' : '' }}>
-                                            <label for="option_{{ $option->id }}" class="ml-3 text-sm flex-grow cursor-pointer">
+                                        <div class="flex min-h-12 items-center rounded-lg p-2 transition-colors hover:bg-gray-50">
+                                            <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option->id }}" id="option_{{ $option->id }}" class="answer-radio" data-question-id="{{ $question->id }}"
+                                                onclick="console.log('Radio clicked:', { id: this.id, questionId: this.dataset.questionId, value: this.value })" {{ isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $option->id ? 'checked' : '' }}>
+                                            <label for="option_{{ $option->id }}" class="ml-3 flex-grow cursor-pointer text-sm">
                                                 {{ $option->option_text }}
                                                 @if ($option->image)
                                                     <img src="{{ asset('storage/' . $option->image) }}" alt="Option Image" class="mt-1 max-w-xs">
@@ -76,10 +83,8 @@
                                 </div>
 
                                 <div class="mt-2 hidden text-sm text-green-600" id="status_{{ $question->id }}">
-                                    <svg class="inline-block w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
+                                    <svg class="mr-1 inline-block h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                                     </svg>
                                     <span>Jawaban tersimpan</span>
                                 </div>
@@ -87,9 +92,8 @@
                         @endforeach
                     </div>
 
-                    <div class="mt-6 flex justify-between items-center">
-                        <button type="submit"
-                            class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <div class="mt-6 flex items-center justify-between">
+                        <button type="submit" class="rounded-lg bg-sky-500 px-6 py-2 text-white transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
                             Selesaikan Kuis
                         </button>
                     </div>

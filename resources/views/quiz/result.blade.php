@@ -209,9 +209,14 @@
                             <div class="{{ !$isAnswered ? 'ring-1 ring-amber-100 bg-amber-50' : ($isCorrect ? 'ring-1 ring-emerald-100' : 'ring-1 ring-rose-100') }} rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
                                 <!-- Question Header -->
                                 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-                                    <h4 class="text-lg font-semibold leading-relaxed text-gray-800">
-                                        {{ $index + 1 }}. {{ $question->question_text }}
-                                    </h4>
+                                    <p class="text-lg font-semibold leading-relaxed text-gray-800">
+                                        <span class="mr-2 text-base font-bold text-gray-600">{{ $index + 1 }}.</span>
+                                    <div class="flex-1">
+                                        <div class="prose-md prose max-w-none text-gray-800">
+                                            {!! Str::markdown($question->question_text) !!}
+                                        </div>
+                                    </div>
+                                    </p>
                                     <div class="flex-shrink-0">
                                         @if (!$isAnswered)
                                             <span class="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">

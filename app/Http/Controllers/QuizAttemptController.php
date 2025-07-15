@@ -22,8 +22,10 @@ class QuizAttemptController extends Controller
         return view('dashboard', compact('attempts'));
     }
 
-    public function start(Quiz $quiz)
+    public function start($slug)
     {
+        $quiz = Quiz::where('slug', $slug)->firstOrFail();
+
         if ($quiz->deadline && Carbon::parse($quiz->deadline) < now()) {
             return redirect()->back()
                 ->with('error', 'Kuis ini sudah melewati batas waktu pengerjaan.');

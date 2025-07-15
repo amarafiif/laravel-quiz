@@ -5,13 +5,13 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="px-4 py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <x-alert></x-alert>
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 @foreach ($course->quizzes as $item)
-                    <a href="{{ route('quiz.start', $item->slug) }}" class="block">
-                        <div class="transform overflow-hidden bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg sm:rounded-lg">
+                    <a href="{{ route('quiz.start', $item) }}" class="block">
+                        <div class="transform overflow-hidden rounded-lg bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-lg">
                             <div class="space-y-3 p-4">
                                 <div class="aspect-video overflow-hidden rounded-lg">
                                     <img src="{{ Storage::url($item->thumbnail) }}" class="h-full w-full object-cover" alt="{{ $item->name }} thumbnail">
@@ -24,14 +24,14 @@
                                         {{ $item->description }}
                                     </p>
                                     <div class="flex items-center space-x-2">
-                                        <span class="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-500">
+                                        <span class="inline-flex items-center rounded-md bg-sky-100 px-2 py-1 text-xs font-semibold text-sky-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 h-4 w-4" viewBox="0 0 24 24">
                                                 <circle cx="12" cy="12" r="9" fill="currentColor" fill-opacity="0.25" />
                                                 <path fill="currentColor" d="M12 5.3c0-.143 0-.214.046-.258s.116-.042.254-.036a7 7 0 1 1-6.207 10.75c-.074-.116-.111-.175-.096-.237s.077-.098.2-.169l5.653-3.263c.073-.043.11-.064.13-.099c.02-.034.02-.077.02-.161z" />
                                             </svg>
                                             {{ $item->attempt_time }}
                                         </span>
-                                        <span class="inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-500">
+                                        <span class="inline-flex items-center rounded-md bg-sky-100 px-2 py-1 text-xs font-semibold text-sky-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-1 h-4 w-4" viewBox="0 0 24 24">
                                                 <g fill="none">
                                                     <path fill="currentColor" fill-rule="evenodd"

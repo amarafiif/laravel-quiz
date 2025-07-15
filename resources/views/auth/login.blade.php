@@ -1,44 +1,57 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+@extends('layouts.auth')
 
-        <x-alert class="mb-4"> </x-alert>
+@section('header', 'Masuk ke Dashboard')
+@section('sub-header', 'Selamat datang kembali! Silakan masuk untuk melanjutkan progres belajar Anda.')
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+@section('form-content')
+    <x-validation-errors class="mb-4" />
 
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus
-                    autocomplete="username" />
+    @if (session('status'))
+        <div class="mb-4 text-sm font-medium text-green-600">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('login') }}" class="space-y-6">
+        @csrf
+
+        <div>
+            <x-label for="email" value="{{ __('Email') }}" class="block text-sm font-medium text-gray-700" />
+            <div class="mt-1">
+                <x-input id="email" class="block w-full appearance-none rounded-lg border border-gray-300 px-3 py-3 text-sm placeholder-gray-400 focus:border-sky-500 focus:outline-none focus:ring-sky-500" type="email" name="email" :value="old('email')" required autofocus autocomplete="username"
+                    placeholder="member@example.com" />
             </div>
+        </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+        <div>
+            <x-label for="password" value="{{ __('Password') }}" class="block text-sm font-medium text-gray-700" />
+            <div class="mt-1">
+                <x-input id="password" class="block w-full appearance-none rounded-lg border border-gray-300 px-3 py-3 text-sm placeholder-gray-400 focus:border-sky-500 focus:outline-none focus:ring-sky-500" type="password" name="password" required autocomplete="current-password"
+                    placeholder="Masukkan password Anda" />
             </div>
+        </div>
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <x-checkbox id="remember_me" name="remember" class="h-4 w-4 rounded border-gray-300 text-sky-500 focus:ring-sky-500" />
+                <label for="remember_me" class="ml-2 block text-sm text-gray-600">
+                    {{ __('Ingat saya') }}
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
+            @if (Route::has('password.request'))
+                <div class="text-sm">
+                    <a href="{{ route('password.request') }}" class="font-medium text-sky-500 hover:text-sky-600">
+                        Lupa password?
                     </a>
-                @endif
+                </div>
+            @endif
+        </div>
 
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+        <div>
+            <button type="submit" class="group relative flex w-full justify-center rounded-lg border border-transparent bg-sky-500 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+                {{ __('Masuk') }}
+            </button>
+        </div>
+    </form>
+@endsection

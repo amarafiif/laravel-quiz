@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="sticky top-0 z-50 border-b border-gray-100 bg-white py-4 shadow-sm">
+<nav x-data="{ open: false }" class="sticky top-0 z-50 border-b border-gray-100 bg-white py-2 shadow-sm">
     <!-- Primary Navigation Menu -->
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">
@@ -27,10 +27,10 @@
             @guest
                 <!-- Guest Navigation - Login/Register buttons -->
                 <div class="hidden space-x-2 sm:ms-6 sm:flex sm:items-center">
-                    <a href="{{ route('login') }}" class="rounded-md bg-gray-100 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-200">
+                    <a href="{{ route('login') }}" class="rounded-lg bg-gray-100 px-6 py-3 text-sm font-medium text-gray-700 hover:bg-gray-200">
                         {{ __('Login') }}
                     </a>
-                    <a href="{{ route('register') }}" class="rounded-md bg-sky-500 px-4 py-3 text-sm font-medium text-white hover:bg-sky-600">
+                    <a href="{{ route('register') }}" class="rounded-lg bg-sky-500 px-6 py-3 text-sm font-medium text-white hover:bg-sky-600">
                         {{ __('Register') }}
                     </a>
                 </div>

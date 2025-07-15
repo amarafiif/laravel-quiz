@@ -4,7 +4,32 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name') }} - Platform Quiz Online Terbaik</title>
+    <meta name="description" content="Platform kuis online untuk pembelajaran dan persiapan berbagai tes. Latihan soal dengan berbagai kategori dan tingkat kesulitan dalam sistem yang interaktif dan mudah digunakan.">
+    <meta name="keywords" content="kuis online, latihan soal, pembelajaran interaktif, tes online, quiz edukasi, platform belajar, simulasi ujian, latihan quiz, sistem pembelajaran, edukasi digital">
+    <meta name="author" content="Tim {{ config('app.name') }}">
+    <meta name="publisher" content="{{ config('app.name') }} Indonesia">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ config('app.name') }} - Platform Quiz Online Terbaik">
+    <meta property="og:description" content="Tingkatkan pengetahuan Anda dengan platform quiz online interaktif. Berbagai kategori soal dan sistem pembelajaran yang menyenangkan untuk semua kalangan.">
+    <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ config('app.name') }} - Platform Quiz Online Terbaik">
+    <meta property="twitter:description" content="Tingkatkan pengetahuan Anda dengan platform quiz online interaktif. Berbagai kategori soal dan sistem pembelajaran yang menyenangkan.">
+    <meta property="twitter:image" content="{{ asset('images/og-image.jpg') }}">
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="icon" href="{{ asset('favicon/favicon.ico') }}" type="image/x-icon">
+
+    <title>{{ config('app.name') }} - Platform Quiz Online </title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -18,7 +43,11 @@
 </head>
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 font-sans tracking-tight antialiased">
-
+    @if (config('app.env') !== 'production')
+        <div class="fixed bottom-5 left-0 z-50 transform rounded-e-xl bg-orange-400 px-4 py-2 text-center text-white shadow-sm shadow-orange-400 drop-shadow-xl">
+            <span class="text-sm">🚧 Development Mode</span>
+        </div>
+    @endif
     <!-- Navigation -->
     <nav class="sticky top-0 z-50 w-full border-b border-gray-200/20 bg-white/80 backdrop-blur-lg" x-data="{ open: false }">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -448,7 +477,7 @@
                     <p class="mb-4 max-w-md tracking-tight text-gray-400">
                         Platform quiz online terbaik untuk meningkatkan pengetahuan dan keterampilan Anda dengan cara yang interaktif dan menyenangkan.
                     </p>
-                    <div class="flex space-x-4">
+                    {{-- <div class="flex space-x-4">
                         <a href="#" class="text-gray-400 transition-colors hover:text-sky-400">
                             <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                 <path fill-rule="evenodd"
@@ -469,7 +498,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </a>
-                    </div>
+                    </div> --}}
                 </div>
                 <div>
                     <h3 class="mb-4 text-lg font-semibold">Menu</h3>

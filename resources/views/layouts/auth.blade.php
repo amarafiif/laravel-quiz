@@ -141,6 +141,12 @@
             </div>
         </div>
     </div>
+
+    @if (config('app.env') !== 'production')
+        <div class="fixed bottom-5 left-1/2 -translate-x-1/2 transform rounded-xl bg-orange-600 px-4 py-2 text-center text-white shadow-sm shadow-orange-400 drop-shadow-xl">
+            <span class="text-sm">🚧 Development Mode</span>
+        </div>
+    @endif
 </body>
 
 </html>

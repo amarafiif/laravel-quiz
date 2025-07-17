@@ -97,7 +97,7 @@
                                                 $isSelected = isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $option->id;
                                             @endphp
 
-                                            <div class="{{ $isSelected ? 'bg-sky-50 border-sky-200' : 'border-gray-200 bg-gray-50' }} rounded-lg border p-3 transition-colors hover:bg-gray-100">
+                                            <div class="option-container {{ $isSelected ? 'bg-sky-50 border-sky-200' : 'border-gray-200 bg-gray-50' }} rounded-lg border p-3 transition-colors hover:bg-gray-100" data-question-id="{{ $question->id }}">
                                                 <div class="flex items-center">
                                                     <!-- Option indicator -->
                                                     <div class="mr-3 flex-shrink-0">
@@ -224,6 +224,31 @@
                     }
                 }
 
+                // Fungsi untuk mengupdate styling option
+                function updateOptionStyling(questionId, selectedOptionId) {
+                    // Reset all options for this question
+                    const questionContainer = document.getElementById(`question-container-${questionId}`);
+                    const optionContainers = questionContainer.querySelectorAll('.option-container');
+
+                    optionContainers.forEach(container => {
+                        if (container.dataset.questionId == questionId) {
+                            // Reset to unselected state
+                            container.classList.remove('bg-sky-50', 'border-sky-200');
+                            container.classList.add('border-gray-200', 'bg-gray-50');
+                        }
+                    });
+
+                    // Apply selected style to the chosen option
+                    const selectedOption = document.getElementById(`option_${selectedOptionId}`);
+                    if (selectedOption) {
+                        const selectedContainer = selectedOption.closest('.option-container');
+                        if (selectedContainer) {
+                            selectedContainer.classList.remove('border-gray-200', 'bg-gray-50');
+                            selectedContainer.classList.add('bg-sky-50', 'border-sky-200');
+                        }
+                    }
+                }
+
                 // Event listener untuk radio buttons
                 const radioButtons = document.querySelectorAll('.answer-radio');
 
@@ -233,6 +258,11 @@
                             questionId: this.dataset.questionId,
                             optionId: this.value
                         });
+
+                        // Update styling immediately
+                        updateOptionStyling(this.dataset.questionId, this.value);
+
+                        // Save answer to server
                         saveAnswer(this.dataset.questionId, this.value);
                     });
                 });

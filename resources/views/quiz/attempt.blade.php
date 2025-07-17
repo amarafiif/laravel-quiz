@@ -1,103 +1,147 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex w-full items-center justify-between">
-            <div class="flex-shrink">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    {{ $attempt->quiz->name }}
-                </h2>
-            </div>
-
-            <div class="flex-shrink rounded-lg bg-white px-6 py-2 shadow">
-                <p class="text-center text-sm text-slate-500">Sisa waktu</p>
-                <div x-data="{
-                    remainingTime: {{ $remainingTime }},
-                    init() {
-                        this.updateTimer();
-                        setInterval(() => this.updateTimer(), 1000);
-                    },
-                    updateTimer() {
-                        if (this.remainingTime <= 0) {
-                            document.getElementById('quizForm').submit();
-                            return;
-                        }
-                        this.remainingTime--;
-                    },
-                    formatTime() {
-                        const minutes = Math.floor(this.remainingTime / 60);
-                        const seconds = this.remainingTime % 60;
-                        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                    }
-                }" x-init="init()" class="text-center">
-                    <span class="text-2xl font-bold text-gray-700" x-text="formatTime()"></span>
-                </div>
-            </div>
+    <div class="sticky top-1 z-50 flex-shrink rounded-lg border border-gray-200 bg-white px-6 py-2 shadow-lg">
+        <p class="text-center text-sm text-slate-500">Sisa waktu</p>
+        <div x-data="{
+            remainingTime: {{ $remainingTime }},
+            init() {
+                this.updateTimer();
+                setInterval(() => this.updateTimer(), 1000);
+            },
+            updateTimer() {
+                if (this.remainingTime <= 0) {
+                    document.getElementById('quizForm').submit();
+                    return;
+                }
+                this.remainingTime--;
+            },
+            formatTime() {
+                const minutes = Math.floor(this.remainingTime / 60);
+                const seconds = this.remainingTime % 60;
+                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }" x-init="init()" class="text-center">
+            <span class="text-2xl font-bold text-sky-600" x-text="formatTime()"></span>
         </div>
-    </x-slot>
-
+    </div>
     <!-- Notification Status -->
     <div class="fixed right-4 top-4 z-50" id="saveStatus">
-        <div class="hidden rounded px-4 py-2 shadow-lg transition-all duration-300" id="statusAlert">
-            <span id="saveStatusText"></span>
+        <div class="hidden rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-xl transition-all duration-300" id="statusAlert">
+            <div class="flex items-center">
+                <div class="mr-2" id="statusIcon"></div>
+                <span id="saveStatusText" class="text-sm font-medium"></span>
+            </div>
         </div>
     </div>
 
     <div class="py-12">
-        <div class="w-md mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="min-h-screen bg-white p-6 shadow-xl sm:rounded-lg">
-                <form id="quizForm" action="{{ route('quiz.submit', $attempt->id) }}" method="POST">
-                    @csrf
-                    <div class="space-y-6">
-                        @foreach ($questions as $question)
-                            <div class="rounded-lg border p-4 lg:p-6" id="question-container-{{ $question->id }}">
-                                <div class="mb-4">
-                                    <div class="flex items-start gap-3">
-                                        <span class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-sky-100 text-sm font-semibold text-sky-800">
-                                            {{ $loop->iteration }}
-                                        </span>
-                                        <div class="min-w-0 flex-1">
-                                            <div class="prose-md prose max-w-none text-gray-800 sm:prose-base">
-                                                {!! Str::markdown($question->question_text) !!}
-                                            </div>
-                                            @if ($question->image)
-                                                <div class="mt-3">
-                                                    <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" class="w-full max-w-sm rounded-lg shadow-sm sm:max-w-md lg:max-w-lg">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-slate-50 to-gray-50 px-6 py-8">
+                    <h1 class="text-center text-3xl font-bold text-gray-900">{{ $attempt->quiz->name }}</h1>
+                    <p class="mt-2 text-center text-sm text-gray-600">Kerjakan dengan teliti dan sesuai kemampuan Anda</p>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+                    <form id="quizForm" action="{{ route('quiz.submit', $attempt->id) }}" method="POST">
+                        @csrf
+
+                        <!-- Questions Section -->
+                        <div class="space-y-6">
+                            {{-- <div class="border-b pb-6">
+                                <h2 class="text-center text-xl font-bold text-gray-800">Soal Kuis</h2>
+                            </div> --}}
+
+                            @foreach ($questions as $question)
+                                <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6" id="question-container-{{ $question->id }}">
+                                    <!-- Question Header -->
+                                    <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                                        <div class="flex-1">
+                                            <span class="mb-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-700">
+                                                {{ $loop->iteration }}
+                                            </span>
+                                            <hr class="border-1 mb-3 w-full border-dashed border-gray-200">
+                                            <div class="flex items-start gap-3">
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="prose-md prose max-w-none text-gray-800">
+                                                        {!! Str::markdown($question->question_text) !!}
+                                                    </div>
                                                 </div>
-                                            @endif
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <div class="hidden text-sm text-green-600" id="status_{{ $question->id }}">
+                                                <span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                                                    <svg class="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                    Tersimpan
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="ms-1 mt-2 space-y-2 border-t-2 border-dashed border-gray-200 py-4 ps-8">
-                                    @foreach ($question->options as $option)
-                                        <div class="flex min-h-12 items-center rounded-lg p-2 transition-colors hover:bg-gray-50">
-                                            <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option->id }}" id="option_{{ $option->id }}" class="answer-radio" data-question-id="{{ $question->id }}"
-                                                onclick="console.log('Radio clicked:', { id: this.id, questionId: this.dataset.questionId, value: this.value })" {{ isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $option->id ? 'checked' : '' }}>
-                                            <label for="option_{{ $option->id }}" class="ml-3 flex-grow cursor-pointer text-sm">
-                                                {{ $option->option_text }}
-                                                @if ($option->image)
-                                                    <img src="{{ asset('storage/' . $option->image) }}" alt="Option Image" class="mt-1 max-w-xs">
-                                                @endif
-                                            </label>
+                                    @if ($question->image)
+                                        <div class="mb-4">
+                                            <img src="{{ asset('storage/' . $question->image) }}" alt="Question Image" class="max-w-md rounded-lg shadow-sm">
                                         </div>
-                                    @endforeach
-                                </div>
+                                    @endif
 
-                                <div class="mt-2 hidden text-sm text-green-600" id="status_{{ $question->id }}">
-                                    <svg class="mr-1 inline-block h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                    <!-- Options -->
+                                    <div class="mt-6 space-y-3">
+                                        @foreach ($question->options as $option)
+                                            @php
+                                                $isSelected = isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $option->id;
+                                            @endphp
+
+                                            <div class="{{ $isSelected ? 'border-sky-200 bg-sky-50' : 'border-gray-200 bg-gray-50' }} rounded-lg border p-3 transition-colors hover:bg-gray-100">
+                                                <div class="flex items-center">
+                                                    <!-- Option indicator -->
+                                                    <div class="mr-3 flex-shrink-0">
+                                                        <input type="radio" name="answers[{{ $question->id }}]" value="{{ $option->id }}" id="option_{{ $option->id }}" class="answer-radio h-4 w-4 text-sky-600 focus:ring-sky-500" data-question-id="{{ $question->id }}"
+                                                            {{ $isSelected ? 'checked' : '' }}>
+                                                    </div>
+
+                                                    <!-- Option content -->
+                                                    <div class="min-w-0 flex-1">
+                                                        <label for="option_{{ $option->id }}" class="cursor-pointer">
+                                                            <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+                                                                <span class="break-words text-gray-700">
+                                                                    {{ $option->option_text }}
+                                                                </span>
+                                                            </div>
+
+                                                            @if ($option->image)
+                                                                <img src="{{ asset('storage/' . $option->image) }}" alt="Option Image" class="mt-2 max-w-xs rounded shadow-sm">
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-8 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
+                                <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-sky-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <span>Jawaban tersimpan</span>
-                                </div>
+                                    Selesaikan Kuis
+                                </button>
                             </div>
-                        @endforeach
-                    </div>
 
-                    <div class="mt-6 flex items-center justify-between">
-                        <button type="submit" class="rounded-lg bg-sky-500 px-6 py-2 text-white transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-                            Selesaikan Kuis
-                        </button>
-                    </div>
-                </form>
+                            <div class="text-center text-sm text-gray-500 sm:text-right">
+                                <p>Pastikan semua jawaban telah dipilih sebelum menyelesaikan kuis</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -107,15 +151,27 @@
                 const saveStatus = document.getElementById('saveStatus');
                 const statusAlert = document.getElementById('statusAlert');
                 const saveStatusText = document.getElementById('saveStatusText');
+                const statusIcon = document.getElementById('statusIcon');
 
                 // Fungsi untuk menampilkan status
                 function showStatus(message, type = 'info') {
                     saveStatusText.textContent = message;
-                    statusAlert.className = `px-4 py-2 rounded shadow-lg ${
-                    type === 'success' ? 'bg-green-100 text-green-700' :
-                    type === 'error' ? 'bg-red-100 text-red-700' :
-                    'bg-yellow-100 text-yellow-700'
-                }`;
+
+                    // Set icon based on type
+                    if (type === 'success') {
+                        statusIcon.innerHTML =
+                            '<svg class="h-5 w-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>';
+                        saveStatusText.className = 'text-sm font-medium text-emerald-700';
+                    } else if (type === 'error') {
+                        statusIcon.innerHTML =
+                            '<svg class="h-5 w-5 text-rose-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>';
+                        saveStatusText.className = 'text-sm font-medium text-rose-700';
+                    } else {
+                        statusIcon.innerHTML =
+                            '<svg class="h-5 w-5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>';
+                        saveStatusText.className = 'text-sm font-medium text-amber-700';
+                    }
+
                     statusAlert.classList.remove('hidden');
 
                     setTimeout(() => {
@@ -155,14 +211,14 @@
                             throw new Error(data.message || 'Gagal menyimpan jawaban');
                         }
 
-                        showStatus('✓ Jawaban tersimpan', 'success');
+                        showStatus('Jawaban tersimpan', 'success');
                         const questionStatus = document.getElementById(`status_${questionId}`);
                         if (questionStatus) {
                             questionStatus.classList.remove('hidden');
                         }
 
                     } catch (error) {
-                        showStatus('⚠ Gagal menyimpan jawaban: ' + error.message, 'error');
+                        showStatus('Gagal menyimpan jawaban: ' + error.message, 'error');
                     }
                 }
 

@@ -1,4 +1,5 @@
 <x-app-layout>
+    {{-- Timer --}}
     <div class="sticky top-1 z-50 flex-shrink rounded-lg border border-gray-200 bg-white px-6 py-2 shadow-lg">
         <p class="text-center text-sm text-slate-500">Sisa waktu</p>
         <div x-data="{
@@ -23,6 +24,7 @@
             <span class="text-2xl font-bold text-sky-600" x-text="formatTime()"></span>
         </div>
     </div>
+
     <!-- Notification Status -->
     <div class="fixed right-4 top-4 z-50" id="saveStatus">
         <div class="hidden rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-xl transition-all duration-300" id="statusAlert">
@@ -38,8 +40,8 @@
             <div class="overflow-hidden bg-white shadow-xl sm:rounded-lg">
                 <!-- Header -->
                 <div class="bg-gradient-to-r from-slate-50 to-gray-50 px-6 py-8">
-                    <h1 class="text-center text-3xl font-bold text-gray-900">{{ $attempt->quiz->name }}</h1>
-                    <p class="mt-2 text-center text-sm text-gray-600">Kerjakan dengan teliti dan sesuai kemampuan Anda</p>
+                    <h1 class="text-left text-2xl font-bold text-gray-900">{{ $attempt->quiz->name }}</h1>
+                    <p class="mt-2 text-left text-sm text-gray-600">Kerjakan dengan teliti dan sesuai kemampuan Anda</p>
                 </div>
 
                 <!-- Content -->
@@ -58,9 +60,19 @@
                                     <!-- Question Header -->
                                     <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                                         <div class="flex-1">
-                                            <span class="mb-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-700">
-                                                {{ $loop->iteration }}
-                                            </span>
+                                            <div class="flex gap-3">
+                                                <span class="mb-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-bold text-slate-700">
+                                                    {{ $loop->iteration }}
+                                                </span>
+                                                <div class="{{ isset($userAnswers[$question->id]) ? '' : 'hidden' }} text-sm text-green-600" id="status_{{ $question->id }}">
+                                                    <span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                                                        <svg class="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                                        </svg>
+                                                        Jawaban Tersimpan
+                                                    </span>
+                                                </div>
+                                            </div>
                                             <hr class="border-1 mb-3 w-full border-dashed border-gray-200">
                                             <div class="flex items-start gap-3">
                                                 <div class="min-w-0 flex-1">
@@ -68,16 +80,6 @@
                                                         {!! Str::markdown($question->question_text) !!}
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <div class="hidden text-sm text-green-600" id="status_{{ $question->id }}">
-                                                <span class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
-                                                    <svg class="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                                    </svg>
-                                                    Tersimpan
-                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +97,7 @@
                                                 $isSelected = isset($userAnswers[$question->id]) && $userAnswers[$question->id] == $option->id;
                                             @endphp
 
-                                            <div class="{{ $isSelected ? 'border-sky-200 bg-sky-50' : 'border-gray-200 bg-gray-50' }} rounded-lg border p-3 transition-colors hover:bg-gray-100">
+                                            <div class="{{ $isSelected ? 'bg-sky-50 border-sky-200' : 'border-gray-200 bg-gray-50' }} rounded-lg border p-3 transition-colors hover:bg-gray-100">
                                                 <div class="flex items-center">
                                                     <!-- Option indicator -->
                                                     <div class="mr-3 flex-shrink-0">
@@ -129,7 +131,7 @@
                         <div class="mt-8 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
                             <div class="flex flex-col gap-3 sm:flex-row sm:gap-4">
                                 <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-sky-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-                                    <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                     Selesaikan Kuis

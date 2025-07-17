@@ -83,7 +83,7 @@ class QuizAttemptController extends Controller
 
         $questions = $attempt->quiz->questions()->with('options')->orderBy('id')->get();
         $remainingTime = max(0, (int) now()->diffInSeconds($attempt->ends_at));
-        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->uuid)
+        $userAnswers = UserAnswer::where('quiz_attempt_id', $attempt->id)
             ->pluck('selected_option_id', 'question_id')
             ->toArray();
 

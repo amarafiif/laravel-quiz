@@ -17,6 +17,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Enums\Alignment;
 use Filament\Widgets;
+use FilipFonal\FilamentLogManager\Pages\Logs;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -63,8 +64,15 @@ class AdminPanelProvider extends PanelProvider
                         ->items([
                             ...\App\Filament\Resources\MemberResource::getNavigationItems(),
                         ]),
+                    NavigationGroup::make('System')
+                        ->items([
+                            ...Logs::getNavigationItems(),
+                        ]),
                 ]);
             })
+            ->plugins([
+                \FilipFonal\FilamentLogManager\FilamentLogManager::make(),
+            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,

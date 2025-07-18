@@ -57,4 +57,15 @@ class HomeController extends Controller
 
         return view('quizzes.grid', compact('quizzes'))->render();
     }
+
+    public function show($slug)
+    {
+        $quiz = Quiz::with('questions')
+            ->withCount('attempts')
+            ->where('slug', $slug)
+            ->where('is_publish', true)
+            ->firstOrFail();
+
+        return view('quizzes.show', compact('quiz'));
+    }
 }

@@ -26,7 +26,8 @@
 
 <div id="quiz-grid" class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
     @forelse ($quizzes as $item)
-        <a href="#modal-quiz-{{ $item->slug }}" class="group block transform cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        {{-- <a href="#modal-quiz-{{ $item->slug }}" class="group block transform cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"> --}}
+        <a href="{{ route('quizzes.show', $item->slug) }}" class="group block transform cursor-pointer overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
             <div class="flex aspect-video items-center justify-center bg-sky-500">
                 <img alt="Thumbnail {{ $item->name }}" srcset="{{ Storage::url($item->thumbnail) }}">
             </div>

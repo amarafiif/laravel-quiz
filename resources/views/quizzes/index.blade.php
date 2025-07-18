@@ -1,5 +1,22 @@
 @extends('layouts.main')
 
+@section('title', 'Coba Beragam Kuis Gratis - ' . config('app.name'))
+@section('description', 'Platform kuis online untuk pembelajaran dan persiapan berbagai tes. Latihan soal dengan berbagai kategori dan tingkat kesulitan dalam sistem yang interaktif dan mudah digunakan.')
+@section('keywords', 'kuis, latihan soal, gratis, latihan tes soal gratis, tes gratis, edukasi, pembelajaran, platform kuis online')
+@section('author', 'Tim ' . config('app.name'))
+@section('publisher', config('app.name') . ' Indonesia')
+@section('robots', 'index, follow')
+
+@section('og:title', 'Kuis Tersedia - ' . config('app.name'))
+@section('og:description', 'Temukan berbagai kuis menarik untuk menguji pengetahuan Anda. Pilih dari berbagai kategori dan tingkat kesulitan yang sesuai dengan minat Anda.')
+@section('og:image', asset('images/og-image.jpg'))
+@section('og:type', 'website')
+
+@section('twitter:title', 'Kuis Tersedia - ' . config('app.name'))
+@section('twitter:description', 'Temukan berbagai kuis menarik untuk menguji pengetahuan Anda. Pilih dari berbagai kategori dan tingkat kesulitan yang sesuai dengan minat Anda.')
+@section('twitter:image', asset('images/og-image.jpg'))
+
+
 @section('main-content')
     <div id="header" class="mx-auto mb-4 mt-8 flex max-w-7xl content-center items-center justify-between gap-2 rounded-2xl bg-white px-4 py-8 lg:px-8">
         <div id="title">

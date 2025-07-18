@@ -189,7 +189,7 @@ class QuizAttemptController extends Controller
             'unanswered' => $unansweredQuestions,
         ];
 
-        return view('quiz.result', compact('attempt', 'questions', 'userAnswers', 'statistics'));
+        return view('quizzes.result', compact('attempt', 'questions', 'userAnswers', 'statistics'));
     }
 
     private function calculateScore(QuizAttempt $attempt)

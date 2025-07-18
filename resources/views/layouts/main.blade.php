@@ -36,6 +36,7 @@
 
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @stack('styles')
 </head>
 
 <body class="flex min-h-screen flex-col bg-gradient-to-br from-gray-50 to-gray-100 font-sans tracking-tight antialiased">
@@ -59,20 +60,6 @@
 
     <!-- Smooth Scrolling Script -->
     <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
         // Add scroll effect to navbar
         window.addEventListener('scroll', function() {
             const nav = document.querySelector('nav');

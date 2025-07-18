@@ -38,24 +38,24 @@
                 <div>
                     <h3 class="mb-4 text-lg font-semibold">Menu</h3>
                     <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-200 transition-colors hover:text-white">Home</a></li>
-                        <li><a href="#features" class="text-gray-200 transition-colors hover:text-white">Fitur</a></li>
-                        <li><a href="#courses" class="text-gray-200 transition-colors hover:text-white">Kategori</a></li>
-                        <li><a href="#about" class="text-gray-200 transition-colors hover:text-white">Tentang</a></li>
+                        <li><a href="#home" class="text-white transition-colors hover:text-white">Home</a></li>
+                        <li><a href="#features" class="text-white transition-colors hover:text-white">Fitur</a></li>
+                        <li><a href="#courses" class="text-white transition-colors hover:text-white">Kategori</a></li>
+                        <li><a href="#about" class="text-white transition-colors hover:text-white">Tentang</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="mb-4 text-lg font-semibold">Bantuan</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-200 transition-colors hover:text-white">FAQ</a></li>
-                        <li><a href="#" class="text-gray-200 transition-colors hover:text-white">Panduan</a></li>
-                        <li><a href="#" class="text-gray-200 transition-colors hover:text-white">Kontak</a></li>
-                        <li><a href="#" class="text-gray-200 transition-colors hover:text-white">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-white transition-colors hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-white transition-colors hover:text-white">Panduan</a></li>
+                        <li><a href="#" class="text-white transition-colors hover:text-white">Kontak</a></li>
+                        <li><a href="#" class="text-white transition-colors hover:text-white">Kebijakan Privasi</a></li>
                     </ul>
                 </div>
             </div>
             <div class="mt-8 border-t border-gray-100 pt-8 text-center">
-                <p class="text-gray-200">&copy; {{ date('Y') }} {{ config('app.name') }}. Dibuat dengan ❤️ menggunakan Laravel.</p>
+                <p class="text-white">&copy; {{ date('Y') }} {{ config('app.name') }}. Dibuat dengan ❤️ menggunakan Laravel.</p>
             </div>
         </div>
     </footer>

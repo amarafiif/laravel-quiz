@@ -21,5 +21,6 @@ Route::middleware(['web', 'auth:web', config('jetstream.auth_session'), 'auth.me
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/quizzes', [HomeController::class, 'listQuizzes'])->name('list.quizzes');
+Route::get('/filter-quizzes', [HomeController::class, 'filter'])->name('quizzes.filter');
 
 Route::get('/quiz/result/{attempt:uuid}', [QuizAttemptController::class, 'showResult'])->name('quiz.result');

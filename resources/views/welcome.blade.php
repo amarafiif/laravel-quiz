@@ -149,8 +149,8 @@
         </div>
     </section>
 
-    <!-- Courses Preview -->
-    <section id="courses" class="py-24">
+    <!-- Quizzes Preview -->
+    <section id="quizzes" class="py-24">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="mb-16 text-center">
                 <h2 class="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Kuis Populer</h2>
@@ -158,7 +158,6 @@
             </div>
 
             <div class="mb-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                <!-- Course Card 1 -->
                 @foreach ($popularQuizzes as $item)
                     <div class="group transform overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-lg">
                         <div class="p-6">
@@ -177,37 +176,12 @@
                         </div>
                     </div>
                 @endforeach
-
-                <!-- Course Card 2 -->
-                {{-- <div class="group transform overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-                    <div class="flex aspect-video items-center justify-center bg-gradient-to-br from-green-400 to-green-600">
-                        <svg class="h-16 w-16 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                        </svg>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="mb-2 text-xl font-semibold text-gray-900">Web Development</h3>
-                        <p class="mb-4 text-gray-600">Kuasai teknologi web modern dengan HTML, CSS, JavaScript dan framework populer.</p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-sky-500">20 Quiz Tersedia</span>
-                            <div class="flex items-center text-yellow-400">
-                                ⭐ 4.9
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
 
             <div class="text-center">
-                @auth
-                    <a href="{{ route('courses.index') }}" class="transform rounded-lg bg-sky-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-sky-600 hover:shadow-xl">
-                        Lihat Semua Kuis Tersedia
-                    </a>
-                @else
-                    <a href="{{ route('register') }}" class="transform rounded-lg bg-sky-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-sky-600 hover:shadow-xl">
-                        Daftar untuk Mengakses Kursus
-                    </a>
-                @endauth
+                <a href="{{ route('list.quizzes') }}" class="transform rounded-lg bg-sky-500 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-sky-600 hover:shadow-xl">
+                    Lihat Semua Kuis Tersedia
+                </a>
             </div>
         </div>
     </section>

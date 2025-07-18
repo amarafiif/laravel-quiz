@@ -25,12 +25,12 @@
         </div>
     </div>
     <div id="quiz-detail" class="mx-auto mb-24 mt-8 max-w-7xl gap-2 rounded-2xl bg-white px-4 py-8 lg:px-8">
-        <div class="flex content-center items-center justify-between">
-            <div id="thumbnail">
-                <img class="h-48 w-full rounded-lg object-cover" src="{{ Storage::url($quiz->thumbnail) }}" alt="Thumbnail {{ $quiz->name }}">
+        <div class="flex flex-col content-center items-center justify-between gap-4 lg:flex-row">
+            <div id="thumbnail" class="w-full lg:w-auto">
+                <img class="h-48 w-full rounded-lg object-cover lg:w-80" src="{{ Storage::url($quiz->thumbnail) }}" alt="Thumbnail {{ $quiz->name }}">
             </div>
-            <div id="detail-info" class="flex-1 space-y-6 px-4">
-                <h2 class="text-xl text-gray-600">{{ $quiz->description }}</h2>
+            <div id="detail-info" class="flex-1 space-y-4 px-0 lg:space-y-6 lg:px-4">
+                <h2 class="text-md text-gray-600 lg:text-lg">{{ $quiz->description }}</h2>
                 <div class="flex flex-wrap gap-2">
                     <span class="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-sm font-medium text-sky-600">
                         <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,8 +54,8 @@
                     @endif
                 </div>
             </div>
-            <div id="actions" class="mt-4">
-                <a href="{{ route('quiz.start', $quiz->slug) }}" class="rounded-lg bg-sky-500 px-8 py-3 font-medium text-white transition-colors hover:bg-sky-600">
+            <div id="actions" class="w-full lg:mt-4 lg:w-auto">
+                <a href="{{ route('quiz.start', $quiz->slug) }}" class="block w-full rounded-lg bg-sky-500 px-8 py-3 text-center font-medium text-white transition-colors hover:bg-sky-600 lg:inline-block lg:w-auto">
                     Kerjakan Kuis
                 </a>
             </div>

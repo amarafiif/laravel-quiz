@@ -87,7 +87,7 @@ class QuizAttemptController extends Controller
             ->pluck('selected_option_id', 'question_id')
             ->toArray();
 
-        return view('quiz.attempt', [
+        return view('quizzes.attempt', [
             'attempt' => $attempt,
             'questions' => $questions,
             'userAnswers' => $userAnswers,

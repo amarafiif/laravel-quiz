@@ -47,7 +47,9 @@
     @endif
 
     <!-- Navigation -->
-    @include('layouts.partials.navbar')
+    @if (!request()->is('quiz/attempt/*'))
+        @include('layouts.partials.navbar')
+    @endif
 
     <!-- Main -->
     <main class="flex-grow">
@@ -56,8 +58,9 @@
 
 
     <!-- Footer -->
-    @include('layouts.partials.footer')
-
+    @if (!request()->is('quiz/attempt/*'))
+        @include('layouts.partials.footer')
+    @endif
     <!-- Smooth Scrolling Script -->
     <script>
         // Add scroll effect to navbar

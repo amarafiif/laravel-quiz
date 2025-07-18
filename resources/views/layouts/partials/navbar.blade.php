@@ -13,8 +13,8 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden items-center space-x-8 md:flex">
-                    <a href="/" class="px-3 py-2 font-medium text-gray-600 transition-colors hover:text-sky-500">Home</a>
-                    <a href="#features" class="px-3 py-2 font-medium text-gray-600 transition-colors hover:text-sky-500">Fitur</a>
+                    <a href="/" class="px-3 py-2 font-medium text-gray-600 transition-colors hover:text-sky-500">Beranda</a>
+                    {{-- <a href="#features" class="px-3 py-2 font-medium text-gray-600 transition-colors hover:text-sky-500">Fitur</a> --}}
                     <a href="{{ route('list.quizzes') }}" class="px-3 py-2 font-medium text-gray-600 transition-colors hover:text-sky-500">Kuis</a>
                     <a href="#about" class="px-3 py-2 font-medium text-gray-600 transition-colors hover:text-sky-500">Tentang</a>
 
@@ -45,8 +45,8 @@
         <!-- Mobile Navigation -->
         <div x-show="open" x-transition class="md:hidden">
             <div class="space-y-1 border-t border-gray-200 bg-white px-2 pb-3 pt-2">
-                <a href="/" class="block px-3 py-2 font-medium text-gray-600 hover:text-sky-500">Home</a>
-                <a href="#features" class="block px-3 py-2 font-medium text-gray-600 hover:text-sky-500">Fitur</a>
+                <a href="/" class="block px-3 py-2 font-medium text-gray-600 hover:text-sky-500">Beranda</a>
+                {{-- <a href="#features" class="block px-3 py-2 font-medium text-gray-600 hover:text-sky-500">Fitur</a> --}}
                 <a href="{{ route('list.quizzes') }}" class="block px-3 py-2 font-medium text-gray-600 hover:text-sky-500">Kuis</a>
                 <a href="#about" class="block px-3 py-2 font-medium text-gray-600 hover:text-sky-500">Tentang</a>
 

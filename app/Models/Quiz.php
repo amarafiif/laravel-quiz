@@ -10,6 +10,11 @@ class Quiz extends Model
 {
     protected $guarded = [];
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);

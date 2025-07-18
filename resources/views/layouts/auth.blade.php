@@ -30,7 +30,7 @@
                     </div>
                     <div id="header-form">
                         <div id="header">
-                            <h1 class="text-3xl font-bold text-gray-900">@yield('header')</h1>
+                            <h1 class="text-2xl font-bold text-gray-900">@yield('header')</h1>
                         </div>
                         <div id="sub-header" class="mt-2">
                             <p class="text-gray-600">@yield('sub-header')</p>

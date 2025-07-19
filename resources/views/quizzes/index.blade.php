@@ -50,10 +50,9 @@
                         <label for="categoryFilter" class="mb-2 block text-sm font-medium text-gray-700">Kategori</label>
                         <select id="categoryFilter" class="w-full rounded-lg border-gray-300 px-3 py-3 text-gray-600 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500">
                             <option value="">Semua Kategori</option>
-                            <option value="1">Matematika</option>
-                            <option value="2">Bahasa</option>
-                            <option value="3">Sains</option>
-                            <option value="4">Sejarah</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -72,9 +71,7 @@
 
         <div class="mx-auto mb-16 max-w-7xl rounded-2xl bg-white px-4 py-8 lg:px-8">
             <div id="quiz-list-container">
-                <div id="quiz-grid" class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                    @include('quizzes.grid', ['quizzes' => $quizzes])
-                </div>
+                @include('quizzes.grid', ['quizzes' => $quizzes])
             </div>
         </div>
     </div>
@@ -92,6 +89,8 @@
 
                 if (category) url.searchParams.append('category', category);
                 if (sort) url.searchParams.append('sort', sort);
+
+                url.searchParams.append('ajax', '1');
 
                 quizContainer.html('<div class="col-span-full min-h-[390px] content-center text-center py-12">Memuat kuis...</div>');
 
@@ -122,21 +121,34 @@
 
             $(document).on('click', '#pagination-links a', function(e) {
                 e.preventDefault();
-                const url = $(this).attr('href');
+                const url = new URL($(this).attr('href'));
+
+                const filterUrl = new URL("{{ route('quizzes.filter') }}");
+
+                const page = url.searchParams.get('page');
+                if (page) filterUrl.searchParams.append('page', page);
+
+                filterUrl.searchParams.append('ajax', '1');
+
+                const category = $('#categoryFilter').val();
+                const sort = $('#sortFilter').val();
+                if (category) filterUrl.searchParams.append('category', category);
+                if (sort) filterUrl.searchParams.append('sort', sort);
 
                 quizContainer.html('<div class="col-span-full min-h-[390px] content-center text-center py-12">Memuat halaman berikutnya...</div>');
 
                 $.ajax({
-                    url: url,
+                    url: filterUrl.toString(),
                     type: 'GET',
                     success: function(response) {
                         quizContainer.html(response);
                         $('html, body').animate({
-                            scrollTop: quizContainer.offset().top - 80
+                            scrollTop: quizContainer.offset().top - 110
                         }, 'smooth');
                     },
                     error: function(error) {
                         console.error('Gagal memuat halaman:', error);
+                        quizContainer.html('<div class="col-span-full text-center text-red-500 py-12">Terjadi kesalahan saat memuat data.</div>');
                     }
                 });
             });

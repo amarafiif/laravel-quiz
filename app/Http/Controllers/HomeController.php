@@ -56,10 +56,13 @@ class HomeController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $quizzes = $query->paginate(6)->withQueryString();
-        $quizzes->setPath(route('quizzes.filter'));
+        $quizzes = $query->paginate(3)->withQueryString();
 
-        return view('quizzes.grid', compact('quizzes'))->render();
+        if ($request->ajax() || $request->has('ajax')) {
+            return view('quizzes.grid', compact('quizzes'))->render();
+        }
+
+        return redirect()->route('list.quizzes');
     }
 
     public function show($slug)

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 
@@ -12,21 +13,23 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $categories = Category::all();
         $popularQuizzes = Quiz::with('attempts')
             ->withCount('attempts')
             ->orderBy('attempts_count', 'desc')
             ->paginate(3);
 
-        return view('welcome', compact('popularQuizzes'));
+        return view('welcome', compact('popularQuizzes', 'categories'));
     }
 
     public function listQuizzes()
     {
+        $categories = Category::all();
         $quizzes = Quiz::where('is_publish', true)
             ->orderBy('created_at', 'desc')
-            ->paginate(6);
+            ->paginate(3);
 
-        return view('quizzes.index', compact('quizzes'));
+        return view('quizzes.index', compact('quizzes', 'categories'));
     }
 
     public function filter(Request $request)
@@ -54,6 +57,7 @@ class HomeController extends Controller
         }
 
         $quizzes = $query->paginate(6)->withQueryString();
+        $quizzes->setPath(route('quizzes.filter'));
 
         return view('quizzes.grid', compact('quizzes'))->render();
     }

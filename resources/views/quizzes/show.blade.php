@@ -16,29 +16,29 @@
 @section('twitter:description', $quiz->description)
 @section('twitter:image', asset('images/og-image.jpg'))
 
-
 @section('main-content')
-    <div id="header" class="mx-auto mb-4 mt-8 flex max-w-7xl content-center items-center justify-between gap-2 rounded-2xl bg-white px-4 py-8 lg:px-8">
+    <div id="header" class="mx-auto mb-2 mt-6 flex max-w-7xl content-center items-center justify-between gap-2 rounded-2xl bg-white px-4 py-4 lg:px-8">
         <div id="title">
-            <h1 class="text-2xl font-bold text-gray-900">{{ $quiz->name }}</h1>
-            <p class="text-gray-600"></p>
+            <a href="{{ route('list.quizzes') }}" class="text-sky-500">
+                <span class="mr-1">&larr;</span>Kembali</a>
         </div>
     </div>
-    <div id="quiz-detail" class="mx-auto mb-24 mt-8 max-w-7xl gap-2 rounded-2xl bg-white px-4 py-8 lg:px-8">
+    <div id="quiz-detail" class="mx-auto mb-24 max-w-7xl gap-2 rounded-2xl bg-white px-4 py-8 lg:px-8">
         <div class="flex flex-col content-center items-center justify-between gap-4 lg:flex-row">
             <div id="thumbnail" class="w-full lg:w-auto">
                 <img class="h-48 w-full rounded-lg object-cover lg:w-80" src="{{ Storage::url($quiz->thumbnail) }}" alt="Thumbnail {{ $quiz->name }}">
             </div>
             <div id="detail-info" class="flex-1 space-y-4 px-0 lg:space-y-6 lg:px-4">
+                <h1 class="text-xl font-bold text-gray-900">{{ $quiz->name }}</h1>
                 <h2 class="text-md text-gray-600 lg:text-lg">{{ $quiz->description }}</h2>
                 <div class="flex flex-wrap gap-2">
-                    <span class="inline-flex items-center rounded-full bg-sky-100 px-3 py-1 text-sm font-medium text-sky-600">
+                    <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
                         <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         {{ $quiz->total_questions }} Soal
                     </span>
-                    <span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-600">
+                    <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-600">
                         <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
@@ -93,5 +93,4 @@
             </div>
         @endforeach
     </div>
-
 @endsection

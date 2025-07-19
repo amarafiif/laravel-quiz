@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', config('app.name') . ' - Platform Quiz Online')</title>
-    <meta name="description" content="@yield('description', 'Platform kuis online untuk pembelajaran dan persiapan berbagai tes. Latihan soal dengan berbagai kategori dan tingkat kesulitan dalam sistem yang interaktif dan mudah digunakan.')">
+    <meta name="description" content="@yield('description', 'Platform kuis online untuk pembelajaran dan persiapan berbagai tes. Latihan soal de    ngan berbagai kategori dan tingkat kesulitan dalam sistem yang interaktif dan mudah digunakan.')">
     <meta name="keywords" content="@yield('keywords', 'kuis online, latihan soal, pembelajaran interaktif, tes online, quiz edukasi, platform belajar, simulasi ujian, latihan quiz, sistem pembelajaran, edukasi digital')">
     <meta name="author" content="@yield('author', 'Tim ' . config('app.name'))">
     <meta name="publisher" content="@yield('publisher', config('app.name') . ' Indonesia')">
@@ -30,12 +30,16 @@
     <link rel="canonical" href="{{ url()->current() }}">
     <link rel="icon" href="{{ asset('favicon/favicon.ico') }}" type="image/x-icon">
 
-
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
     @stack('styles')
 </head>
 
@@ -61,20 +65,7 @@
     @if (!request()->is('quiz/attempt/*'))
         @include('layouts.partials.footer')
     @endif
-    <!-- Smooth Scrolling Script -->
-    <script>
-        // Add scroll effect to navbar
-        window.addEventListener('scroll', function() {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 100) {
-                nav.classList.add('bg-white/90');
-                nav.classList.remove('bg-white/80');
-            } else {
-                nav.classList.add('bg-white/80');
-                nav.classList.remove('bg-white/90');
-            }
-        });
-    </script>
+
     @stack('scripts')
 </body>
 
